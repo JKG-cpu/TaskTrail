@@ -5,8 +5,23 @@
         "**/.hg": true,
         "**/.DS_Store": true,
         "**/Thumbs.db": true,
-        "**/*.crswap": true
+        "**/*.crswap": true,
+        ".venv": true,
+        ".gitignore": true,
+        "LICENSE": true,
+        ".python-version": true,
+        ".vscode": true,
+        "pyproject.toml": true,
+        "uv.lock": true
     },
-    "hide-files.files": [],
+    "hide-files.files": [
+        ".venv",
+        ".gitignore",
+        "LICENSE",
+        ".python-version",
+        ".vscode",
+        "pyproject.toml",
+        "uv.lock"
+    ],
     "python-envs.defaultEnvManager": "ms-python.python:system"
 }
