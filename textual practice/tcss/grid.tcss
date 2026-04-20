@@ -1,0 +1,15 @@
+Grid {
+    /* Define a 3-column grid */
+    grid-size: 3;
+    /* Spacing between columns and rows */
+    grid-gutter: 1;
+    /* Optional: padding around the whole grid */
+    padding: 1;
+}
+
+.box {
+    background: $accent;
+    color: $text;
+    text-align: center;
+    border: solid green;
+}

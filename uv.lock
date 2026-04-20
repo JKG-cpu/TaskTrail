@@ -2,6 +2,12 @@ version = 1
 revision = 3
 requires-python = ">=3.12"
 
+[manifest]
+members = [
+    "tasktrail",
+    "textual-practice",
+]
+
 [[package]]
 name = "linkify-it-py"
 version = "2.1.0"
@@ -110,6 +116,17 @@ sdist = { url = "https://files.pythonhosted.org/packages/cf/2f/d44f0f12b3ddb1f0b
 wheels = [
     { url = "https://files.pythonhosted.org/packages/0e/28/a81d6ce9f4804818bd1231a9a6e4d56ea84ebbe8385c49591444f0234fa2/textual-8.2.3-py3-none-any.whl", hash = "sha256:5008ac581bebf1f6fa0520404261844a231e5715fdbddd10ca73916a3af48ca2", size = 724231, upload-time = "2026-04-05T09:12:48.747Z" },
 ]
+
+[[package]]
+name = "textual-practice"
+version = "0.1.0"
+source = { virtual = "textual practice" }
+dependencies = [
+    { name = "textual" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "textual", specifier = ">=8.2.3" }]
 
 [[package]]
 name = "typing-extensions"
