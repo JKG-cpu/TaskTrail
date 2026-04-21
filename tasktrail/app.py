@@ -1,25 +1,20 @@
-from textual.app import App, ComposeResult
-from textual.widgets import Header, Footer, Static
+from textual.app import App
+from textual.widgets import Button
 
-from logic import *
 from screens import *
+from logic import *
 
 class TaskTrail(App):
-    BINDINGS = [
-        ("Q", "quit", "Quit"), 
-        ("D", "toggle_dark", "Toggle Dark / Light Mode")
-    ]
+    BINDINGS = [("q", "quit", "Quit TaskTrail")]
 
-    def compose(self) -> ComposeResult:
-        header = Header(name = "TaskTrail")
-        footer = Footer()
+    def on_mount(self) -> None:
+        self.push_screen(HomePage())
 
-        yield header
-        yield HomePage()
-        yield footer
+    def on_button_pressed(self, event: Button.Pressed) -> None:
+        if event.button.id == "settings-btn":
+            # Open Settings Screen
+            pass
 
 if __name__ == "__main__":
-    task_trail = TaskTrail()
-    task_trail.run()
-    
+    TaskTrail().run()
     cc()
