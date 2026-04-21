@@ -1,0 +1,19 @@
+Grid {
+    grid-size: 2;
+    grid-rows: 1fr 1fr;
+    grid-columns: 1fr 1fr;
+}
+
+Button {
+    background: transparent;
+    border: none;
+    color: $text;
+    width: 100%;
+    text-style: none;
+}
+
+.title {
+    border: solid $panel;
+    text-align: center;
+    width: 100%;
+}

@@ -1,10 +1,10 @@
 from textual.app import ComposeResult
 from textual.screen import Screen
 from textual.containers import Grid, Vertical
-from textual.widgets import Static, Header, Footer, Button
+from textual.widgets import Static, Header, Footer, Button, Label
 
 class HomePage(Screen):
-    CSS_PATH = "../styles/homepage.tcss"
+    CSS_PATH = ["../styles/homepage.tcss", "../styles/base.tcss"]
 
     def compose(self) -> ComposeResult:
         header = Header("TaskTrail")
@@ -12,6 +12,8 @@ class HomePage(Screen):
         header.styles.content_align = ("center", "middle")
         header.styles.align = ("center", "middle")
         yield header
+
+        yield Label("HomePage", classes = "title")
 
         with Grid():
             for item in ["Assignments", "Profiles", "Classes"]:
