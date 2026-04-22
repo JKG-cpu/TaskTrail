@@ -6,14 +6,28 @@ from logic import *
 
 class TaskTrail(App):
     BINDINGS = [("q", "quit", "Quit TaskTrail")]
+    SCREENS = {
+        "Home": HomePage,
+        "Settings": SettingsPage
+    }
 
     def on_mount(self) -> None:
-        self.push_screen(HomePage())
+        self.push_screen("Home")
 
     def on_button_pressed(self, event: Button.Pressed) -> None:
+        # Button IDs
         if event.button.id == "settings-btn":
-            # Open Settings Screen
-            pass
+            self.push_screen("Settings")
+            return
+
+        # Classes
+        if event.button.has_class("toHome"):
+            self.push_screen("Home")
+            return
+
+        if event.button.has_class("goBack"):
+            self.pop_screen()
+            return
 
 if __name__ == "__main__":
     TaskTrail().run()

@@ -6,10 +6,14 @@ Grid {
 
 Button {
     background: transparent;
-    border: none;
+    border: solid $panel;
     color: $text;
     width: 100%;
     text-style: none;
+}
+
+Tabs {
+    padding-top: 1;
 }
 
 .title {
