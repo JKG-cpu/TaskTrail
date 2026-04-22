@@ -1,7 +1,7 @@
 from textual.app import ComposeResult
 from textual.screen import Screen
 from textual.containers import Grid, Vertical
-from textual.widgets import Static, Header, Footer, Button, Label, Tabs
+from textual.widgets import Static, Header, Footer, Button, Tabs
 
 class HomePage(Screen):
     CSS_PATH = ["../styles/homepage.tcss", "../styles/base.tcss"]
@@ -13,10 +13,10 @@ class HomePage(Screen):
         header.styles.align = ("center", "middle")
         yield header
 
-        yield Tabs("Home Page", "First tab", "Second tab", "Thirdtab", classes = "navbar")
+        yield Tabs("Home Page", "Assignments", "Classes")
 
         with Grid():
-            for item in ["Assignments", "Profiles", "Classes"]:
+            for item in ["Assignments", "Calendar", "Classes"]:
                 with Vertical(classes = "grid-section"):
                     static = Static(item, classes = "grid-title")
                     static.styles.text_align = "center"
