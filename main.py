@@ -1,6 +1,5 @@
-def main():
-    print("Hello from tasktrail!")
-
+from tasktrail.app import TaskTrail, cc
 
 if __name__ == "__main__":
-    main()
+    TaskTrail().run()
+    cc()

@@ -1,13 +1,13 @@
 from textual.app import App
 from textual.widgets import Button
 
-from screens import *
-from logic import *
+from .screens import *
+from .logic import *
 
 class TaskTrail(App):
     BINDINGS = [("q", "quit", "Quit TaskTrail")]
     SCREENS = {
-        "Home": HomePage,
+        "Home": HomePageScreen,
         "Settings": SettingsPage
     }
 
@@ -28,7 +28,3 @@ class TaskTrail(App):
         if event.button.has_class("goBack"):
             self.pop_screen()
             return
-
-if __name__ == "__main__":
-    TaskTrail().run()
-    cc()

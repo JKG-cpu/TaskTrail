@@ -1,9 +1,10 @@
 from textual.app import ComposeResult
 from textual.screen import Screen
-from textual.containers import Grid, Vertical
-from textual.widgets import Static, Header, Footer, Button, Tabs
+from textual.widgets import Header, Footer, TabPane, TabbedContent
 
-class HomePage(Screen):
+from ..widgets import *
+
+class HomePageScreen(Screen):
     CSS_PATH = ["../styles/homepage.tcss", "../styles/base.tcss"]
 
     def compose(self) -> ComposeResult:
@@ -13,26 +14,15 @@ class HomePage(Screen):
         header.styles.align = ("center", "middle")
         yield header
 
-        yield Tabs("Home Page", "Assignments", "Classes")
+        with TabbedContent(initial="homePageTab"):
+            with TabPane("Home Page", id = "homePageTab"):
+                yield HomePage()
+            
+            with TabPane("Assignments", id="assignmentsTab"):
+                yield Assignments()
 
-        with Grid():
-            for item in ["Assignments", "Calendar", "Classes"]:
-                with Vertical(classes = "grid-section"):
-                    static = Static(item, classes = "grid-title")
-                    static.styles.text_align = "center"
-                    yield static
-                    static = Static(item, classes = "grid-item")
-                    static.styles.text_align = "center"
-                    yield static
-
-            with Vertical(classes = "grid-section"):
-                static = Static("Today's Date", classes = "grid-item", id = "todays-data-btn")
-                static.styles.text_align = "center"
-                yield static
-        
-                static = Button("Settings", classes = "grid-item", id = f"settings-btn")
-                static.styles.text_align = "center"
-                yield static
+            with TabPane("Classes", id = "classesTab"):
+                yield Classes()
 
         footer = Footer()
         yield footer

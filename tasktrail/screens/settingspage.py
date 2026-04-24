@@ -3,7 +3,7 @@ from textual.screen import Screen
 from textual.widgets import Button
 
 class SettingsPage(Screen):
-    CSS_PATH = ["../styles/base.tcss"]
+    CSS_PATH = ["../styles/base.tcss", "../styles/settings.tcss"]
 
     def compose(self) -> ComposeResult:
         yield Button("Go Back", classes = "toHome")

@@ -1,2 +1,2 @@
-from .homepage import HomePage
+from .homepage import HomePageScreen
 from .settingspage import SettingsPage
