@@ -15,12 +15,19 @@ class TaskTrail(App):
         self.push_screen("Home")
 
     def on_button_pressed(self, event: Button.Pressed) -> None:
-        # Button IDs
+        # Homepage Tab
         if event.button.id == "settings-btn":
             self.push_screen("Settings")
             return
 
-        # Classes
+        # Classes Tab
+        if event.button.id == "addClass":
+            pass
+
+        if event.button.id == "removeClass":
+            pass
+
+        # General buttons
         if event.button.has_class("toHome"):
             self.push_screen("Home")
             return

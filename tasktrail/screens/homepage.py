@@ -14,7 +14,7 @@ class HomePageScreen(Screen):
         header.styles.align = ("center", "middle")
         yield header
 
-        with TabbedContent(initial="homePageTab"):
+        with TabbedContent(initial="classesTab"):
             with TabPane("Home Page", id = "homePageTab"):
                 yield HomePage()
             
