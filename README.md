@@ -14,8 +14,8 @@ TaskTrail/
 └── README.md
 ```
 
-### SIDEQUEST LINK (This is just for me...)
-https://flavortown.hackclub.com/sidequests/caffeinated
+### Hackclub link
+https://macondo.hackclub.com/dashboard?from=fade
 
 
 ### Textual Tutorial link
