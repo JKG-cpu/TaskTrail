@@ -12,7 +12,14 @@
         ".python-version": true,
         ".vscode": true,
         "pyproject.toml": true,
-        "uv.lock": true
+        "uv.lock": true,
+        "tasktrail/logic/__pycache__": true,
+        "tasktrail/widgets/homepage/__pycache__": true,
+        "tasktrail/widgets/__pycache__": true,
+        "tasktrail/screens/__pycache__": true,
+        "tasktrail/__pycache__": true,
+        "tasktrail/logic/handlers/__pycache__": true,
+        "tasktrail/logic/helpers/__pycache__": true
     },
     "hide-files.files": [
         ".venv",
@@ -21,7 +28,14 @@
         ".python-version",
         ".vscode",
         "pyproject.toml",
-        "uv.lock"
+        "uv.lock",
+        "tasktrail/logic/__pycache__",
+        "tasktrail/widgets/homepage/__pycache__",
+        "tasktrail/widgets/__pycache__",
+        "tasktrail/screens/__pycache__",
+        "tasktrail/__pycache__",
+        "tasktrail/logic/handlers/__pycache__",
+        "tasktrail/logic/helpers/__pycache__"
     ],
     "python-envs.defaultEnvManager": "ms-python.python:system"
 }
