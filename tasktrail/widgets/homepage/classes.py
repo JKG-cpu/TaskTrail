@@ -21,8 +21,11 @@ class Classes(Static):
     def compose(self) -> ComposeResult:
         with Vertical():
             with VerticalScroll(classes = "grid-section"):
-                for key in self.class_data.keys():
-                    yield ClassCard(str(key), self.class_data[key])
+                if isinstance(self.class_data, str):
+                    yield Static(self.class_data)
+                else:
+                    for key in self.class_data.keys():
+                        yield ClassCard(str(key), self.class_data[key])
 
             self.buttons = Vertical(classes = "grid-section")
             self.buttons.styles.dock = "bottom"
