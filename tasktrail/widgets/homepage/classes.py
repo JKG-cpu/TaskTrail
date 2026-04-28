@@ -22,7 +22,11 @@ class Classes(Static):
         with Vertical():
             with VerticalScroll(classes = "grid-section"):
                 if isinstance(self.class_data, str):
-                    yield Static(self.class_data)
+                    static = Static(self.class_data)
+                    static.styles.align = ("center", "middle")
+                    static.styles.text_align = "center"
+                    yield static
+
                 else:
                     for key in self.class_data.keys():
                         yield ClassCard(str(key), self.class_data[key])

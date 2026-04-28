@@ -1,2 +1,2 @@
 from .homepage import HomePageScreen
-from .settingspage import SettingsPage
+from ..widgets.pages.settingspage import SettingsPage
