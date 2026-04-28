@@ -2,22 +2,6 @@ from textual.app import ComposeResult
 from textual.widgets import Button, Static
 from textual.containers import Vertical, VerticalScroll, Horizontal
 
-# "AP CPS": {
-#     "assignments": [
-#         {
-#             "name": "Homework",
-#             "due_date": "4/26/2026",
-#             "completed": true
-#         },
-#         {
-#             "name": "Homework",
-#             "due_date": "4/27/2026",
-#             "completed": false
-#         }
-#     ],
-#     "grade": "100%"
-# }
-
 class ClassCard(Static):
     def __init__(self, class_name: str, class_assignments: list[dict]) -> None:
         super().__init__()

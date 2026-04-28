@@ -9,7 +9,6 @@ class HomePageScreen(Screen):
     def __init__(self):
         super().__init__()
         self.services = Services()
-        self.class_data = self.services.data["Profile 1"]["classes"]
 
     CSS_PATH = ["../styles/homepage.tcss", "../styles/base.tcss"]
 
@@ -28,7 +27,7 @@ class HomePageScreen(Screen):
                 yield Assignments()
 
             with TabPane("Classes", id = "classesTab"):
-                yield Classes(self.class_data)
+                yield Classes(self.services.get_class_data())
 
         footer = Footer()
         yield footer

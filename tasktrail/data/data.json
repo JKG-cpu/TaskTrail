@@ -39,11 +39,6 @@
                         "name": "Homework",
                         "due_date": "4/26/2026",
                         "completed": true
-                    },
-                    {
-                        "name": "Homework",
-                        "due_date": "4/27/2026",
-                        "completed": false
                     }
                 ],
                 "grade": "100%"
