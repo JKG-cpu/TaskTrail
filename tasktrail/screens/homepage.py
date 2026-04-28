@@ -3,8 +3,14 @@ from textual.screen import Screen
 from textual.widgets import Header, Footer, TabPane, TabbedContent
 
 from ..widgets import *
+from ..logic import Services
 
 class HomePageScreen(Screen):
+    def __init__(self):
+        super().__init__()
+        self.services = Services()
+        self.class_data = self.services.data["Profile 1"]["classes"]
+
     CSS_PATH = ["../styles/homepage.tcss", "../styles/base.tcss"]
 
     def compose(self) -> ComposeResult:
@@ -22,7 +28,7 @@ class HomePageScreen(Screen):
                 yield Assignments()
 
             with TabPane("Classes", id = "classesTab"):
-                yield Classes()
+                yield Classes(self.class_data)
 
         footer = Footer()
         yield footer

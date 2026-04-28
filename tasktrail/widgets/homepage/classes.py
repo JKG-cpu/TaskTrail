@@ -2,11 +2,43 @@ from textual.app import ComposeResult
 from textual.widgets import Button, Static
 from textual.containers import Vertical, VerticalScroll, Horizontal
 
+# "AP CPS": {
+#     "assignments": [
+#         {
+#             "name": "Homework",
+#             "due_date": "4/26/2026",
+#             "completed": true
+#         },
+#         {
+#             "name": "Homework",
+#             "due_date": "4/27/2026",
+#             "completed": false
+#         }
+#     ],
+#     "grade": "100%"
+# }
+
+class ClassCard(Static):
+    def __init__(self, class_name: str, class_assignments: list[dict]) -> None:
+        super().__init__()
+        self.class_name = class_name
+        self.class_assignments = class_assignments
+
+    def compose(self) -> ComposeResult:
+        yield Static(self.class_name)
+        for assignment in self.class_assignments:
+            yield Static(str(self.class_assignments[assignment]))
+
 class Classes(Static):
+    def __init__(self, classes: dict) -> None:
+        super().__init__()
+        self.class_data = classes
+
     def compose(self) -> ComposeResult:
         with Vertical():
             with VerticalScroll(classes = "grid-section"):
-                yield Static("Classes")
+                for key in self.class_data.keys():
+                    yield ClassCard(str(key), self.class_data[key])
 
             self.buttons = Vertical(classes = "grid-section")
             self.buttons.styles.dock = "bottom"
