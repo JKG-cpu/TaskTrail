@@ -27,7 +27,7 @@ class HomePageScreen(Screen):
                 yield Classes(self.services.get_class_data())
 
             with TabPane("Settings", id = "settingsTab"):
-                yield SettingsPage()
+                yield SettingsPage(self.services.get_username())
 
         footer = Footer()
         yield footer
@@ -36,6 +36,10 @@ class HomePageScreen(Screen):
         if event.button.has_class("login"):
             self.app.push_screen(LoginPage(), callback=self.on_login_callback)
 
+        if event.button.has_class("signOut"):
+            self.services.sign_out()
+            self.refresh(recompose = True)
+
     def on_login_callback(self, data: dict) -> None:
         if data is None:
             return
@@ -43,7 +47,7 @@ class HomePageScreen(Screen):
         result = self.services.login(data["username"], data["password"])
 
         if result:
-            self.notify(f"You are now logged into: {data["username"]}")
+            self.notify(f"You are now logged into: {data["username"]}", timeout = 1)
             self.refresh(recompose = True)
 
         else:

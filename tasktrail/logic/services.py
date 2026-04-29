@@ -34,7 +34,7 @@ class Handler:
             return False
 
     # Grabbing data
-    def get_user(self) -> str: return self.current_user if self.current_user != None else "Guest"
+    def get_user(self) -> str: return self.current_user
 
     def get_class_data(self) -> str | dict:
         if self.user_data is None:
@@ -58,6 +58,12 @@ class Services:
     def login(self, username: str, password: str) -> bool:
         return self.handler.log_in(username = username, password = password)
 
+    def sign_out(self) -> None:
+        self.handler.sign_out()
+
     # Getting Data
     def get_class_data(self) -> str | dict:
         return self.handler.get_class_data()
+
+    def get_username(self) -> str: 
+        return self.handler.get_user()

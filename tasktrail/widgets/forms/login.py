@@ -6,7 +6,7 @@ class LoginPage(ModalScreen):
     def compose(self) -> ComposeResult:
         yield Label("Login Form")
         yield Input(placeholder = "Enter in your username", id = "username")
-        yield Input(placeholder = "Enter in your password (Leave blank if you don't have a password)", id = "password")
+        yield Input(placeholder = "Enter in your password (Leave blank if you don't have a password)", id = "password", password = True)
         yield Button("Submit", id = "login-btn")
         yield Button("Cancel", id = "cancel-btn")
 
