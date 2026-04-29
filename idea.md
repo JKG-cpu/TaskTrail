@@ -1,5 +1,3 @@
-<div style="text: white">
-
 # Task Trail Layout Ideas
 
 ## HomePage
@@ -41,4 +39,3 @@ This will reset the whole entire school tab (get rid of all classes & assignment
 
 #### Option in settings to auto remove ToDo's when complete
 
-</div>
