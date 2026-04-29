@@ -1,0 +1,40 @@
+{
+    "JKG": {
+        "password": "password",
+        "profiles": {
+            "School": {
+                "classes": {
+                    "AP CPS": {
+                        "assignments": [
+                            {
+                                "name": "Homework",
+                                "due_date": "4/26/2026",
+                                "completed": true
+                            },
+                            {
+                                "name": "Homework",
+                                "due_date": "4/27/2026",
+                                "completed": false
+                            }
+                        ],
+                        "grade": "100%"
+                    },
+                    "Geometry": {
+                        "assignments": [
+                            {
+                                "name": "Homework",
+                                "due_date": "4/26/2026",
+                                "completed": false
+                            }
+                        ],
+                        "grade": "100%"
+                    }
+                }
+            },
+            "Work": {
+                "To-dos": []
+            }
+        },
+        "settings": {}
+    }
+}
