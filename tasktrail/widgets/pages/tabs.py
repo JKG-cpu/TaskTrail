@@ -24,12 +24,24 @@ class HomeTab(BaseTab):
         super().__init__(tab_name, is_static)
 
     def compose(self) -> ComposeResult:
-        yield Label(str(self.tab_name))
+        yield Label(str(self.tab_name), classes = "grid-title")
 
         with Grid():
-            for i in range(4):
-                with Vertical(classes = "grid-section"):
-                    yield Static(f"Object {i + 1}", classes = "grid-item")
+            # Todo's
+            with Vertical(classes = "grid-section"):
+                yield Static("Todo's", classes = "grid-item")
+
+            # Current Profile
+            with Vertical(classes = "grid-section"):
+                yield Static("Current Profile", classes = "grid-item")
+
+            # School Work
+            with Vertical(classes = "grid-section"):
+                yield Static("School Work", classes = "grid-item")
+
+            # Login
+            with Vertical(classes = "grid-section"):
+                yield Static("Login", classes = "grid-item")
 
 class SettingsTab(BaseTab):
     def __init__(self, tab_name: str, is_static: bool) -> None:

@@ -25,3 +25,10 @@ Grid {
     content-align: center middle;
     align: center middle;
 }
+
+.grid-title {
+    border: solid $panel;
+    width: 100%;
+    text-align: center;
+    content-align: center middle;
+}
