@@ -1,1 +1,1 @@
-from .tabs import Tabs
+from .tabs import *

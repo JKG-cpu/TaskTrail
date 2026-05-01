@@ -42,6 +42,8 @@ class ProfileHandler:
             raise ValueError("No profile was set with a last_used in settings!")
 
     def _set_last_used(self) -> None:
+        for profile in self.current_data["profiles"].values():
+            profile["settings"]["last_used"] = False
         self.current_data["profiles"][self.current_profile]["settings"]["last_used"] = True
 
     # Selecting Data
@@ -78,13 +80,13 @@ class ProfileHandler:
         self._set_last_used()
 
     # Getting Data
-    def get_tabs(self) -> list[dict] | str:
+    def get_tabs(self) -> list[dict]:
         if self.current_data is None:
             return BASE_TABS
 
         tabs = self.current_data["profiles"][self.current_profile]["tabs"]
 
-        return sorted(tabs, lambda tab: tab["order"])
+        return sorted(tabs, key=lambda tab: tab["order"])
 
 class Services:
     def __init__(self) -> None:
@@ -99,6 +101,6 @@ class Services:
     def select_profile(self, profile: str) -> bool | int:
         return self.profile_handler.select_profile(profile)
 
-    def get_tabs(self) -> list[dict] | None:
+    def get_tabs(self) -> list[dict]:
         return self.profile_handler.get_tabs()
     

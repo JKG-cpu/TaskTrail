@@ -3,3 +3,25 @@ Header {
     align: center middle;
     height: 3;
 }
+
+Grid {
+    grid-size: 2;
+    grid-rows: 1fr 1fr;
+    grid-columns: 1fr 1fr;
+    height: 1fr;
+    width: 1fr;
+}
+
+.grid-section {
+    border: solid $panel;
+    padding: 1;
+    height: 1fr;
+}
+
+.grid-item {
+    border: solid $panel;
+    height: 3;
+    text-align: center;
+    content-align: center middle;
+    align: center middle;
+}
