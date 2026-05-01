@@ -1,5 +1,4 @@
-from tasktrail.app import TaskTrail, cc
+from tasktrail import *
 
 if __name__ == "__main__":
     TaskTrail().run()
-    # cc()

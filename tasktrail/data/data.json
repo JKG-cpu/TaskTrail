@@ -1,0 +1,71 @@
+{
+    "JKG": {
+        "password": "password",
+        "profiles": {
+            "Profile 1" : {
+                "tabs": [
+                    {
+                        "type": "home",
+                        "name": "HomePage",
+                        "static": true,
+                        "order": 1
+                    },
+                    {
+                        "type": "settings",
+                        "name": "Settings",
+                        "static": true,
+                        "order": 2
+                    },
+                    {
+                        "type": "school",
+                        "name": "School Work",
+                        "static": false,
+                        "order": 3
+                    },
+                    {
+                        "type": "todo",
+                        "name": "My First ToDo List",
+                        "static": false,
+                        "order": 4
+                    },
+                    {
+                        "type": "todo",
+                        "name": "My Second ToDo List",
+                        "static": false,
+                        "order": 5
+                    }
+                ],
+                "settings": {
+                    "auto_delete": true,
+                    "school_mode": true,
+                    "last_used": true
+                }
+            },
+            "Profile 2": {
+                "tabs": [
+                    {
+                        "type": "home",
+                        "name": "HomePage",
+                        "static": true,
+                        "order": 1
+                    },
+                    {
+                        "type": "settings",
+                        "name": "Settings",
+                        "static": true,
+                        "order": 2
+                    }
+                ],
+                "settings": {
+                    "auto_delete": false,
+                    "school_mode": false,
+                    "last_used": false
+                }
+            }
+        },
+        "settings": {
+            "share_settings": false,
+            "mode": "dark"
+        }
+    }
+}
