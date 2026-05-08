@@ -42,31 +42,5 @@
                 "last_used": true
             }
         }
-    },
-    "JK": {
-        "password": "password",
-        "profiles": {
-            "Profile 1": {
-                "tabs": [
-                    {
-                        "type": "home",
-                        "name": "HomePage",
-                        "static": true,
-                        "order": 1
-                    },
-                    {
-                        "type": "settings",
-                        "name": "Settings",
-                        "static": true,
-                        "order": 2
-                    }
-                ],
-                "settings": {
-                    "auto_delete_todo_lists": true,
-                    "school_mode": true
-                },
-                "last_used": true
-            }
-        }
     }
 }

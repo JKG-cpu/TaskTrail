@@ -34,9 +34,9 @@ BASE_ACCOUNT = {
 }
 
 class ProfileHandler:
-    def __init__(self, file_handler: FileHandler) -> None:
+    def __init__(self, file_handler: FileHandler, data: dict) -> None:
         self.file_handler = file_handler
-        self.data: dict[str, dict] = self.file_handler.load_data()
+        self.data: dict[str, dict] = data
 
         self.current_user: str | None = None
         self.current_profile: str | None = None
@@ -120,9 +120,9 @@ class ProfileHandler:
     def get_profile(self) -> str | None: return self.current_profile
 
 class SettingsHandler:
-    def __init__(self, file_handler: FileHandler):
+    def __init__(self, file_handler: FileHandler, data: dict):
         self.file_handler = file_handler
-        self.data = self.file_handler.load_data()
+        self.data = data
 
         self.user: str | None = None
         self.user_data: dict | None = None
@@ -147,7 +147,7 @@ class SettingsHandler:
 
         self.file_handler.save(self.data)
 
-    def get_settings(self, profile_name: str) -> list[tuple[str, str, bool]] | None:
+    def get_settings(self, profile_name: str) -> list[tuple[str, str, bool]]:
         profile = self.user_data.get("profiles").get(profile_name)
         settings: dict[str, bool] = profile.get("settings")
         return [
@@ -157,9 +157,10 @@ class SettingsHandler:
 class Services:
     def __init__(self) -> None:
         self.file_handler = FileHandler()
+        self.data = self.file_handler.load_data()
 
-        self.profile_handler = ProfileHandler(self.file_handler)
-        self.settings_handler = SettingsHandler(self.file_handler)
+        self.profile_handler = ProfileHandler(self.file_handler, self.data)
+        self.settings_handler = SettingsHandler(self.file_handler, self.data)
     
     # Select / Change
     def login(self, username: str, password: str) -> bool:

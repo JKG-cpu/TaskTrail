@@ -44,12 +44,12 @@ class HomePage(Screen):
         if result:
             result = self.services.login(data["username"], data["password"])
             if result:
-                self.notify(f"Logged into {data["username"]}")
-            
-            self.app.refresh(recompose = True)
+                self.notify(f"Logged into: {data["username"]}")
+                self.refresh(recompose = True)
 
         else:
             self.notify(f"Username: {data["username"]} is already taken!", severity = "warning")
+            self.app.push_screen(CreateAccountPage(), callback = self.create_account_callback)
 
     def login_callback(self, data: dict) -> None:
         if data is None:
