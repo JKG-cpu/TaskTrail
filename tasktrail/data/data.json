@@ -2,7 +2,7 @@
     "JKG": {
         "password": "password",
         "profiles": {
-            "Profile 1" : {
+            "Profile 1": {
                 "tabs": [
                     {
                         "type": "home",
@@ -37,9 +37,9 @@
                 ],
                 "settings": {
                     "auto_delete": true,
-                    "school_mode": true,
-                    "last_used": true
-                }
+                    "school_mode": true
+                },
+                "last_used": true
             },
             "Profile 2": {
                 "tabs": [
@@ -58,14 +58,10 @@
                 ],
                 "settings": {
                     "auto_delete": false,
-                    "school_mode": false,
-                    "last_used": false
-                }
+                    "school_mode": false
+                },
+                "last_used": false
             }
-        },
-        "settings": {
-            "share_settings": false,
-            "mode": "dark"
         }
     }
 }

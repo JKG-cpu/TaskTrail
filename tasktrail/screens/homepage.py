@@ -1,13 +1,13 @@
 from textual.app import ComposeResult
 from textual.screen import Screen
-from textual.widgets import Header, Footer, TabPane, TabbedContent, Static
+from textual.widgets import Header, Footer, TabPane, TabbedContent, Button
 from os.path import join, dirname
 
-from ..widgets import Tabs
+from ..widgets import Tabs, LoginPage
 from ..logic import Services
 
 class HomePage(Screen):
-    CSS_PATH = [join(dirname(__file__), "..", "styles", "base.tcss")]
+    CSS_PATH = [join(dirname(__file__), "..", "styles", "base.tcss"), join(dirname(__file__), "..", "styles", "selection.tcss")]
 
     def __init__(self) -> None:
         super().__init__()
@@ -20,7 +20,28 @@ class HomePage(Screen):
         with TabbedContent():
             for tab in self.tabs:
                 with TabPane(tab["name"]):
-                    yield Tabs(tab["type"], tab["name"], tab["static"])
+                    yield Tabs(tab["type"], tab["name"], tab["static"], self.services)
 
         yield Footer()
 
+    def on_button_pressed(self, event: Button.Pressed) -> None:
+        if event.button.has_class("login"):
+            self.app.push_screen(LoginPage(), callback = self.login_callback)
+
+        if event.button.has_class("signout"):
+            self.services.signout()
+            self.refresh(recompose = True)
+
+    def login_callback(self, data: dict) -> None:
+        if data is None:
+            return
+
+        result = self.services.login(data["username"], data["password"])
+
+        if result:
+            self.notify(f"You are now logged into: {data["username"]}")
+            self.refresh(recompose = True)
+
+        else:
+            self.notify(f"Invalid username or password!", severity = "error")
+            self.app.push_screen(LoginPage(), callback = self.login_callback)

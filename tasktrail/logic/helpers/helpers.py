@@ -27,7 +27,7 @@ class FileHandler:
     def save(self, data: dict) -> None:
         try:
             with open(self.file_path, "w") as f:
-                dump(data, f)
+                dump(data, f, indent = 4)
         
         except FileNotFoundError as f:
             raise FileNotFoundError(f"Filepath {self.file_path} has not been found: {f}")

@@ -20,12 +20,12 @@ BASE_TABS = [
 ]
 
 class ProfileHandler:
-    def __init__(self) -> None:
-        self.file_handler = FileHandler()
+    def __init__(self, file_handler: FileHandler) -> None:
+        self.file_handler = file_handler
         self.data = self.file_handler.load_data()
 
         self.current_user = None
-        self.current_profile = None
+        self.current_profile: dict = None
         self.current_data = None
 
     # Helpers
@@ -35,7 +35,7 @@ class ProfileHandler:
         
         profiles = self.current_data["profiles"]
         for profile in profiles:
-            if profiles[profile]["settings"]["last_used"]:
+            if profiles[profile]["last_used"]:
                 self.current_profile = profile
                 break
         else:
@@ -88,19 +88,84 @@ class ProfileHandler:
 
         return sorted(tabs, key=lambda tab: tab["order"])
 
+    def is_loggedin(self) -> bool: return self.current_user != None
+    def get_username(self) -> str | None: return self.current_user
+    def get_profile(self) -> str | None: return self.current_profile
+
+class SettingsHandler:
+    def __init__(self, file_handler: FileHandler):
+        self.file_handler = file_handler
+        self.data = self.file_handler.load_data()
+
+        self.user: str | None = None
+        self.user_data: dict | None = None
+
+    # Change
+    def reset(self) -> None: 
+        self.user = None
+        self.user_data = None
+
+    def select_user(self, user: str) -> None: 
+        self.user = user
+        self.user_data = self.data.get(self.user)
+
+    def update_settings(self, selected_settings: list, profile_name: str) -> None:
+        profile_settings = self.user_data.get(profile_name).get("settings")
+        for setting in profile_settings:
+            if setting in selected_settings:
+                profile_settings[setting] = True
+            
+            else:
+                profile_settings[setting] = False
+
+        self.file_handler.save(self.data)
+
+    def get_settings(self, profile_name: str) -> list[tuple[str, str, bool]] | None:
+        profiles = self.user_data.get("profiles")
+        profile: dict[str, dict | bool] = profiles.get(profile_name)
+        settings: dict[str, bool] = profile.get("settings")
+        return [
+            (setting.replace("_", " ").title(), setting, settings[setting]) for setting in settings
+        ]
+
 class Services:
     def __init__(self) -> None:
-        self.profile_handler = ProfileHandler()
+        self.file_handler = FileHandler()
+
+        self.profile_handler = ProfileHandler(self.file_handler)
+        self.settings_handler = SettingsHandler(self.file_handler)
     
+    # Select / Change
     def login(self, username: str, password: str) -> bool:
-        return self.profile_handler.login(username, password)
+        output = self.profile_handler.login(username, password)
+
+        if output:
+            self.settings_handler.select_user(username)
+
+        return output
 
     def signout(self) -> None:
         self.profile_handler.signout()
+        self.settings_handler.reset()
     
     def select_profile(self, profile: str) -> bool | int:
         return self.profile_handler.select_profile(profile)
 
+    def update_settings(self, selected_settings: list, profile: str) -> None:
+        return self.settings_handler.update_settings(selected_settings, profile) 
+
+    # Get
     def get_tabs(self) -> list[dict]:
         return self.profile_handler.get_tabs()
     
+    def get_username(self) -> str | None:
+        return self.profile_handler.get_username()
+
+    def get_profile(self) -> str | None:
+        return self.profile_handler.get_profile()
+
+    def get_settings(self, profile_name: str) -> list[tuple[str, str, bool]] | None:
+        return self.settings_handler.get_settings(profile_name = profile_name)
+
+    def is_loggedin(self) -> bool:
+        return self.profile_handler.is_loggedin()

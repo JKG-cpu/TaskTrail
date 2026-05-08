@@ -4,14 +4,24 @@ Header {
     height: 3;
 }
 
-Grid {
-    grid-size: 2;
-    grid-rows: 1fr 1fr;
-    grid-columns: 1fr 1fr;
-    height: 1fr;
-    width: 1fr;
+/* Forms */
+LoginPage {
+    text-align: center;
+    content-align: center middle;
+    align: center middle;
 }
 
+/* Widgets */
+Button {
+    width: 100%;
+    background: transparent;
+    border: solid $panel;
+    text-style: none;
+    text-align: center;
+    content-align: center middle;
+}
+
+/* Grid Section */
 .grid-section {
     border: solid $panel;
     padding: 1;

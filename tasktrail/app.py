@@ -1,4 +1,4 @@
-from textual.app import App, ComposeResult
+from textual.app import App
 from textual.widgets import Static
 
 from .screens import *
