@@ -154,6 +154,28 @@ class SettingsHandler:
             (setting.replace("_", " ").title(), setting, settings[setting]) for setting in settings
         ]
 
+class PageHandler:
+    def __init__(self, file_handler: FileHandler, data: dict):
+        self.file_handler = file_handler
+        self.data = data
+
+        self.user: str | None = None
+        self.profile: str | None = None
+        self.profile_data: dict[str, list | dict | bool] | None = None
+
+    def reset(self) -> None: self.user, self.profile, self.profile_data = None, None, None
+
+    def set_variables(self, user: str, profile: str) -> None:
+        self.user = user
+        self.profile = profile
+        self.profile_data = self.data.get(user).get("profiles").get(profile)
+
+    def get_data(self, page_id: str) -> dict:
+        tabs = self.profile_data.get("tabs")
+        for tab in tabs:
+            if str(tab["order"]) == page_id:
+                return tab["data"]
+
 class Services:
     def __init__(self) -> None:
         self.file_handler = FileHandler()
@@ -161,6 +183,7 @@ class Services:
 
         self.profile_handler = ProfileHandler(self.file_handler, self.data)
         self.settings_handler = SettingsHandler(self.file_handler, self.data)
+        self.page_handler = PageHandler(self.file_handler, self.data)
     
     # Select / Change
     def login(self, username: str, password: str) -> bool:
@@ -171,18 +194,18 @@ class Services:
 
         return output
 
+    def create_account(self, username: str, password: str) -> bool:
+        return self.profile_handler.create_account(username, password)
+
     def signout(self) -> None:
         self.profile_handler.signout()
         self.settings_handler.reset()
-    
+
     def select_profile(self, profile: str) -> bool | int:
         return self.profile_handler.select_profile(profile)
 
     def update_settings(self, selected_settings: list, profile: str) -> None:
         return self.settings_handler.update_settings(selected_settings, profile) 
-
-    def create_account(self, username: str, password: str) -> bool:
-        return self.profile_handler.create_account(username, password)
 
     # Get
     def get_tabs(self) -> list[dict]:
@@ -196,6 +219,9 @@ class Services:
 
     def get_settings(self, profile_name: str) -> list[tuple[str, str, bool]] | None:
         return self.settings_handler.get_settings(profile_name = profile_name)
+
+    def get_page_settings(self, page_id: str) -> dict:
+        return self.page_handler.get_data(page_id)
 
     def is_loggedin(self) -> bool:
         return self.profile_handler.is_loggedin()

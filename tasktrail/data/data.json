@@ -20,19 +20,28 @@
                         "type": "school",
                         "name": "School Work",
                         "static": false,
-                        "order": 3
+                        "order": 3,
+                        "data": {
+                            
+                        }
                     },
                     {
                         "type": "todo",
                         "name": "My First ToDo List",
                         "static": false,
-                        "order": 4
+                        "order": 4,
+                        "data": {
+                            "tasks": []
+                        }
                     },
                     {
                         "type": "todo",
                         "name": "My Second ToDo List",
                         "static": false,
-                        "order": 5
+                        "order": 5,
+                        "data": {
+                            "tasks": []
+                        }
                     }
                 ],
                 "settings": {

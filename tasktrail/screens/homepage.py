@@ -35,6 +35,7 @@ class HomePage(Screen):
         if event.button.has_class("create-account"):
             self.app.push_screen(CreateAccountPage(), callback = self.create_account_callback)
 
+    # Callbacks
     def create_account_callback(self, data: dict) -> None:
         if data is None:
             return

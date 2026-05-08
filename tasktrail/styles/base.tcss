@@ -5,7 +5,7 @@ Header {
 }
 
 /* Forms */
-LoginPage {
+LoginPage, CreateAccountPage {
     text-align: center;
     content-align: center middle;
     align: center middle;
