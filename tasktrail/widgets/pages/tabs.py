@@ -28,43 +28,45 @@ class HomeTab(BaseTab):
         super().__init__(tab_name, is_static, services)
 
     def compose(self) -> ComposeResult:
-        grid = Grid()
-        grid.styles.grid_size_columns = 2
-        grid.styles.grid_columns = "1fr 1fr"
-        grid.styles.height = "1fr"
-        grid.styles.width = "1fr"
+        loggedin = self.services.is_loggedin()
 
-        with grid:
-            # Todo's
-            with Vertical(classes = "grid-section"):
-                yield Static("Todo's", classes = "grid-item")
+        if loggedin:
+            grid = Grid()
+            grid.styles.grid_size_columns = 2
+            grid.styles.grid_columns = "1fr 1fr"
+            grid.styles.height = "1fr"
+            grid.styles.width = "1fr"
 
-            # Current Profile
-            with Vertical(classes = "grid-section"):
-                yield Static("Current Profile", classes = "grid-item")
+            with grid:
+                # Todo's
+                with Vertical(classes = "grid-section"):
+                    yield Static("Todo's", classes = "grid-item")
 
-            # School Work
-            with Vertical(classes = "grid-section"):
-                yield Static("School Work", classes = "grid-item")
+                # Current Profile
+                with Vertical(classes = "grid-section"):
+                    yield Static("Current Profile", classes = "grid-item")
 
-            # Login
-            with Vertical(classes = "grid-section"):
-                loggedin = self.services.is_loggedin()
-                text = f"Welcome, {self.services.get_username()}" if loggedin else "Your not logged in!"
-                login_label = Static(text, classes = "grid-item")
-                login_label.styles.height = "2fr";
+                # School Work
+                with Vertical(classes = "grid-section"):
+                    yield Static("School Work", classes = "grid-item")
 
-                yield login_label
+                # Login
+                with Vertical(classes = "grid-section"):
+                    text = f"Welcome, {self.services.get_username()}"
+                    login_label = Static(text, classes = "grid-item")
+                    login_label.styles.height = "2fr";
 
-                if loggedin:
+                    yield login_label
+
                     button = Button("Sign out", classes = "signout")
                     button.styles.height = "1fr"
                     yield button
 
-                else:
-                    button = Button("Login", classes = "login")
-                    button.styles.height = "1fr"
-                    yield button
+        else:
+            yield Static("Your not logged in!", classes = "grid-title")
+
+            yield Button("Login", classes = "login")
+            yield Button("Create account", classes = "create-account")
 
 class SettingsTab(BaseTab):
     def __init__(self, tab_name: str, is_static: bool, services: Services) -> None:
@@ -76,14 +78,15 @@ class SettingsTab(BaseTab):
                 yield Static("Settings", classes = "grid-title")
 
                 yield SelectionList[str](
-                    *[(setting[0], setting[1], setting[2]) for setting in self.services.get_settings(self.services.get_profile())]
+                    *[Selection(setting[0], setting[1], setting[2]) for setting in self.services.get_settings(self.services.get_profile())],
+                    id = "settings"
                 )
         
         else:
             yield Static("You need to login!", classes = "grid-title")
 
     def on_selection_list_selected_changed(self, event: SelectionList.SelectedChanged):
-        if event.selection_list.id == "profile_settings":
+        if event.selection_list.id == "settings":
             self.services.update_settings(event.selection_list.selected, self.services.get_profile())
 
 class TodoTab(BaseTab):

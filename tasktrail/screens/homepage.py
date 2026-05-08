@@ -3,7 +3,7 @@ from textual.screen import Screen
 from textual.widgets import Header, Footer, TabPane, TabbedContent, Button
 from os.path import join, dirname
 
-from ..widgets import Tabs, LoginPage
+from ..widgets import Tabs, LoginPage, CreateAccountPage
 from ..logic import Services
 
 class HomePage(Screen):
@@ -31,6 +31,25 @@ class HomePage(Screen):
         if event.button.has_class("signout"):
             self.services.signout()
             self.refresh(recompose = True)
+        
+        if event.button.has_class("create-account"):
+            self.app.push_screen(CreateAccountPage(), callback = self.create_account_callback)
+
+    def create_account_callback(self, data: dict) -> None:
+        if data is None:
+            return
+
+        result = self.services.create_account(data["username"], data["password"])
+
+        if result:
+            result = self.services.login(data["username"], data["password"])
+            if result:
+                self.notify(f"Logged into {data["username"]}")
+            
+            self.app.refresh(recompose = True)
+
+        else:
+            self.notify(f"Username: {data["username"]} is already taken!", severity = "warning")
 
     def login_callback(self, data: dict) -> None:
         if data is None:

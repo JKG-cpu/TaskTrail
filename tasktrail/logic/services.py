@@ -19,14 +19,28 @@ BASE_TABS = [
     }
 ]
 
+BASE_ACCOUNT = {
+    "password": "",
+    "profiles": {
+        "Profile 1": {
+            "tabs": BASE_TABS,
+            "settings": {
+                "auto_delete_todo_lists": True,
+                "school_mode": True
+            },
+            "last_used": True
+        }
+    }
+}
+
 class ProfileHandler:
     def __init__(self, file_handler: FileHandler) -> None:
         self.file_handler = file_handler
-        self.data = self.file_handler.load_data()
+        self.data: dict[str, dict] = self.file_handler.load_data()
 
-        self.current_user = None
-        self.current_profile: dict = None
-        self.current_data = None
+        self.current_user: str | None = None
+        self.current_profile: str | None = None
+        self.current_data: dict[str, str | dict] | None = None
 
     # Helpers
     def _construct_variables(self, username: str) -> None:
@@ -66,6 +80,19 @@ class ProfileHandler:
         self.current_user = None
         self.current_profile = None
         self.current_data = None
+
+    def create_account(self, username: str, password: str) -> bool:
+        new_account = BASE_ACCOUNT.copy()
+        new_account["password"] = password
+
+        user = self.data.get(username)
+
+        if user:
+            return False
+
+        self.data[username] = new_account
+        self.file_handler.save(self.data)
+        return True
 
     def select_profile(self, new_profile: str) -> bool | int:
         if self.current_data is None:
@@ -110,7 +137,7 @@ class SettingsHandler:
         self.user_data = self.data.get(self.user)
 
     def update_settings(self, selected_settings: list, profile_name: str) -> None:
-        profile_settings = self.user_data.get(profile_name).get("settings")
+        profile_settings = self.user_data.get("profiles").get(profile_name).get("settings")
         for setting in profile_settings:
             if setting in selected_settings:
                 profile_settings[setting] = True
@@ -121,8 +148,7 @@ class SettingsHandler:
         self.file_handler.save(self.data)
 
     def get_settings(self, profile_name: str) -> list[tuple[str, str, bool]] | None:
-        profiles = self.user_data.get("profiles")
-        profile: dict[str, dict | bool] = profiles.get(profile_name)
+        profile = self.user_data.get("profiles").get(profile_name)
         settings: dict[str, bool] = profile.get("settings")
         return [
             (setting.replace("_", " ").title(), setting, settings[setting]) for setting in settings
@@ -153,6 +179,9 @@ class Services:
 
     def update_settings(self, selected_settings: list, profile: str) -> None:
         return self.settings_handler.update_settings(selected_settings, profile) 
+
+    def create_account(self, username: str, password: str) -> bool:
+        return self.profile_handler.create_account(username, password)
 
     # Get
     def get_tabs(self) -> list[dict]:

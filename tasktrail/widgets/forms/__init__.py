@@ -1,1 +1,1 @@
-from .login import LoginPage
+from .account import LoginPage, CreateAccountPage

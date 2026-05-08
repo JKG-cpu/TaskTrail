@@ -36,12 +36,17 @@
                     }
                 ],
                 "settings": {
-                    "auto_delete": true,
+                    "auto_delete_todo_lists": true,
                     "school_mode": true
                 },
                 "last_used": true
-            },
-            "Profile 2": {
+            }
+        }
+    },
+    "JK": {
+        "password": "password",
+        "profiles": {
+            "Profile 1": {
                 "tabs": [
                     {
                         "type": "home",
@@ -57,10 +62,10 @@
                     }
                 ],
                 "settings": {
-                    "auto_delete": false,
-                    "school_mode": false
+                    "auto_delete_todo_lists": true,
+                    "school_mode": true
                 },
-                "last_used": false
+                "last_used": true
             }
         }
     }
