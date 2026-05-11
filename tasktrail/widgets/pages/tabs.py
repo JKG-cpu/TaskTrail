@@ -11,11 +11,12 @@ __all__ = [
 
 # Tabs
 class BaseTab(Static):
-    def __init__(self, tab_name: str, is_static: bool, services: Services) -> None:
+    def __init__(self, tab_name: str, is_static: bool, services: Services, order: int) -> None:
         super().__init__()
         self.tab_name = tab_name
         self.is_static = is_static
         self.services = services
+        self.order = order
 
     def get_static(self) -> bool: return self.is_static
     def get_name(self) -> str: return self.tab_name
@@ -24,8 +25,8 @@ class BaseTab(Static):
         yield Static(str(self.tab_name))
 
 class HomeTab(BaseTab):
-    def __init__(self, tab_name: str, is_static: bool, services: Services) -> None:
-        super().__init__(tab_name, is_static, services)
+    def __init__(self, tab_name: str, is_static: bool, services: Services, order: str) -> None:
+        super().__init__(tab_name, is_static, services, order)
 
     def compose(self) -> ComposeResult:
         loggedin = self.services.is_loggedin()
@@ -69,8 +70,8 @@ class HomeTab(BaseTab):
             yield Button("Create account", classes = "create-account")
 
 class SettingsTab(BaseTab):
-    def __init__(self, tab_name: str, is_static: bool, services: Services) -> None:
-        super().__init__(tab_name, is_static, services)
+    def __init__(self, tab_name: str, is_static: bool, services: Services, order: str) -> None:
+        super().__init__(tab_name, is_static, services, order)
 
     def compose(self) -> ComposeResult:
         if self.services.is_loggedin():
@@ -90,12 +91,25 @@ class SettingsTab(BaseTab):
             self.services.update_settings(event.selection_list.selected, self.services.get_profile())
 
 class TodoTab(BaseTab):
-    def __init__(self, tab_name: str, is_static: bool, services: Services) -> None:
-        super().__init__(tab_name, is_static, services)
+    def __init__(self, tab_name: str, is_static: bool, services: Services, order: str) -> None:
+        super().__init__(tab_name, is_static, services, order)
+    
+    def compose(self) -> ComposeResult:
+        todo_data = self.services.get_page_data(self.order)
+
+        tasks = todo_data.get("tasks")
+
+        with VerticalScroll(classes = "grid-section"):
+            yield Static(str(tasks))
 
 class SchoolTab(BaseTab):
-    def __init__(self, tab_name: str, is_static: bool, services: Services) -> None:
-        super().__init__(tab_name, is_static, services)
+    def __init__(self, tab_name: str, is_static: bool, services: Services, order: str) -> None:
+        super().__init__(tab_name, is_static, services, order)
+
+    def compose(self) -> ComposeResult:
+        school_data = self.services.get_page_data(self.order)
+
+        yield Static(str(school_data))
 
 # Registry
 TAB_REGISTRY: dict[str, type[Static]] = {
@@ -108,12 +122,13 @@ TAB_REGISTRY: dict[str, type[Static]] = {
 
 # Main
 class Tabs(Vertical):
-    def __init__(self, tab_type: str, tab_name: str, is_static: bool, services: Services) -> None:
+    def __init__(self, tab_type: str, tab_name: str, is_static: bool, services: Services, order: str) -> None:
         super().__init__()
         self.tab_type = tab_type
         self.tab_name = tab_name
         self.is_static = is_static
         self.services = services
+        self.order = order
 
     def compose(self) -> ComposeResult:
         tab = TAB_REGISTRY.get(self.tab_type)
@@ -122,4 +137,4 @@ class Tabs(Vertical):
             raise ValueError(f"Invalid tab type: {self.tab_type}")
 
         else:
-            yield tab(tab_name = self.tab_name, is_static = self.is_static, services = self.services)
+            yield tab(tab_name = self.tab_name, is_static = self.is_static, services = self.services, order = self.order)

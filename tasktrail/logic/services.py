@@ -115,7 +115,7 @@ class ProfileHandler:
 
         return sorted(tabs, key=lambda tab: tab["order"])
 
-    def is_loggedin(self) -> bool: return self.current_user != None
+    def is_loggedin(self) -> bool: return self.current_user != None and self.current_profile != None
     def get_username(self) -> str | None: return self.current_user
     def get_profile(self) -> str | None: return self.current_profile
 
@@ -170,11 +170,18 @@ class PageHandler:
         self.profile = profile
         self.profile_data = self.data.get(user).get("profiles").get(profile)
 
-    def get_data(self, page_id: str) -> dict:
+    def get_data(self, page_id: str) -> dict | None:
         tabs = self.profile_data.get("tabs")
+
+        if not tabs:
+            return None
+
         for tab in tabs:
             if str(tab["order"]) == page_id:
                 return tab["data"]
+        
+        else:
+            raise ValueError(f"Improper id for {page_id}")
 
 class Services:
     def __init__(self) -> None:
@@ -191,7 +198,8 @@ class Services:
 
         if output:
             self.settings_handler.select_user(username)
-
+            self.page_handler.set_variables(username, self.profile_handler.get_profile())
+            
         return output
 
     def create_account(self, username: str, password: str) -> bool:
@@ -220,7 +228,7 @@ class Services:
     def get_settings(self, profile_name: str) -> list[tuple[str, str, bool]] | None:
         return self.settings_handler.get_settings(profile_name = profile_name)
 
-    def get_page_settings(self, page_id: str) -> dict:
+    def get_page_data(self, page_id: str) -> dict | None:
         return self.page_handler.get_data(page_id)
 
     def is_loggedin(self) -> bool:

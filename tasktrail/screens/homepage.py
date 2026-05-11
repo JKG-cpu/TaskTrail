@@ -15,12 +15,14 @@ class HomePage(Screen):
         self.tabs = self.services.get_tabs()
 
     def compose(self) -> ComposeResult:
+        self.tabs = self.services.get_tabs()
+
         yield Header("TaskTrail")
 
         with TabbedContent():
             for tab in self.tabs:
                 with TabPane(tab["name"]):
-                    yield Tabs(tab["type"], tab["name"], tab["static"], self.services)
+                    yield Tabs(tab["type"], tab["name"], tab["static"], self.services, str(tab["order"]))
 
         yield Footer()
 
