@@ -1,5 +1,5 @@
 from textual.app import ComposeResult
-from textual.widgets import Static, Button, SelectionList
+from textual.widgets import Static, Button, SelectionList, Checkbox
 from textual.widgets.selection_list import Selection
 from textual.containers import Grid, Vertical, VerticalScroll
 
@@ -8,6 +8,23 @@ from ...logic import Services
 __all__ = [
     "Tabs"
 ]
+
+# Mini Widgets
+class TodoBox(Static):
+    def __init__(self, task_name: str, details: str, completed: bool) -> None:
+        super().__init__()
+        self.task_name = task_name
+        self.details = details
+        self.completed = completed
+
+    def compose(self) -> ComposeResult:
+        with Vertical(classes = "grid-section"):
+            yield Static(self.task_name)
+            yield Static(f"Details\n    {self.details}")
+            yield Checkbox("Completed?", value = self.completed)
+        
+    def on_checkbox_changed(self, event: Checkbox.Changed) -> None:
+        self.completed = event.value
 
 # Tabs
 class BaseTab(Static):
@@ -100,7 +117,8 @@ class TodoTab(BaseTab):
         tasks = todo_data.get("tasks")
 
         with VerticalScroll(classes = "grid-section"):
-            yield Static(str(tasks))
+            for task in tasks:
+                yield TodoBox(task["name"], task["details"], task["completed"])
 
 class SchoolTab(BaseTab):
     def __init__(self, tab_name: str, is_static: bool, services: Services, order: str) -> None:

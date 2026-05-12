@@ -11,7 +11,7 @@ def cc():
 
 class FileHandler:
     def __init__(self):
-        self.file_path = join("tasktrail", "data", "data.json")
+        self.file_path = join("data", "data.json")
     
     def load_data(self) -> dict:
         try:

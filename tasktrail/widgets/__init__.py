@@ -1,2 +1,2 @@
 from .forms import *
-from .pages import *
+from .panels import *
