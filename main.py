@@ -1,7 +1,13 @@
-from tasktrail import *
+from logic import *
 
-if __name__ == "__main__":
-    tasktrail = TaskTrail()
-    tasktrail.run()
-    if getattr(tasktrail, "_quit_properly", False):
-        cc()
+ch = ClassHandler()
+
+ch.add_class(
+    class_name = "AP CSP",
+    assignment_weight = 0.6,
+    test_weight = 0.4
+)
+
+worked = ch.calculate_overall("AP CSP")
+
+print(ch.classes["AP CSP"])

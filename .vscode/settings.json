@@ -12,7 +12,15 @@
         "tasktrail/screens/__pycache__": true,
         "tasktrail/__pycache__": true,
         "tasktrail/logic/handlers/__pycache__": true,
-        "tasktrail/logic/helpers/__pycache__": true
+        "tasktrail/logic/helpers/__pycache__": true,
+        ".gitignore": true,
+        ".python-version": true,
+        "LICENSE": true,
+        "README.md": true,
+        "Task Trail.png": true,
+        "uv.lock": true,
+        "pyproject.toml": true,
+        ".venv": true
     },
     "hide-files.files": [
         "tasktrail/logic/__pycache__",
@@ -21,7 +29,16 @@
         "tasktrail/screens/__pycache__",
         "tasktrail/__pycache__",
         "tasktrail/logic/handlers/__pycache__",
-        "tasktrail/logic/helpers/__pycache__"
+        "tasktrail/logic/helpers/__pycache__",
+        ".gitignore",
+        ".python-version",
+        "LICENSE",
+        "README.md",
+        "Task Trail.png",
+        "uv.lock",
+        "pyproject.toml",
+        ".venv",
+        ".vscode"
     ],
     "python-envs.defaultEnvManager": "ms-python.python:system"
 }
