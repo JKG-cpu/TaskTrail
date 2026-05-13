@@ -5,45 +5,6 @@ __all__ = [
     "ClassHandler"
 ]
 
-"""
-Class Data Model
-
-{
-    "name": ...,
-    "percent": ...,
-    "assignment_weight": 0,
-    "test_weight": 0,
-    "assignments": [],
-    "tests": []
-}
-
-Assignment Data Model
-{
-    "name": ...,
-    "score": fractions.Fraction,
-    "due_date": ...,
-    "date_turned_in": ...,
-    "completed: bool
-}
-
-Forumals
-
-Assignments + Test:
-    (Test(s) Avgs * Weight) + (Assignment(s) Avgs * Weight)
-
-Empty Section:
-    (Category Avg * Weight) / Active Weights
-
-    EXAMPLE:
-        assignments = 40% weight, 90%
-        tests = 60% weight, 0% (No assignments)
-
-        0.40 = Full weight (No tests = No 60%)
-
-        90 * 0.40 = 36
-        36 / 0.40 = 90%
-
-"""
 
 class ClassHandler:
     def __init__(self) -> None:
@@ -60,16 +21,8 @@ class ClassHandler:
             "percent": None,
             "assignment_weight": assignment_weight,
             "test_weight": test_weight,
-            "assignments": [
-                {
-                    "name": "assignment",
-                    "score": Fraction(2, 2),
-                    "due_date": "",
-                    "date_turned_in": "",
-                    "completed": True
-                }
-            ],
-            "tests": []
+            "assignments": {},
+            "tests": {}
         }
         return True
 
@@ -81,10 +34,75 @@ class ClassHandler:
         return True
     #endregion
 
+    # Manage Assignments
+    #region
+    def add_assignment(self, class_name: str, name: str) -> bool:
+        if class_name not in self.classes:
+            return False
+
+        if name in self.classes[class_name]["assignments"]:
+            return False
+        
+        self.classes[class_name]["assignments"][name] = {
+            "name": name,
+            "grade": 0,
+            "completed": False
+        }
+        return True
+
+    def remove_assignment(self, class_name: str, assignment_name: str) -> bool:
+        if class_name not in self.classes:
+            return False
+        
+        if assignment_name not in self.classes[class_name]["assignments"]:
+            return False
+
+        del self.classes[class_name]["assignments"][assignment_name]
+        return True
+    
+    def check_completed_assignment(self, class_name: str, assignment_name: str, grade: str) -> bool:
+        if class_name not in self.classes:
+            return False
+        
+        if assignment_name not in self.classes[class_name]["assignments"]:
+            return False
+        
+        self.classes[class_name]["assignments"][assignment_name]["completed"] = True
+        self.classes[class_name]["assignments"][assignment_name]["grade"] = Fraction(grade)
+        return True
+    #endregion
+
+    # Manage Tests
+    #region
+    def add_test(self, class_name: str, name: str, grade: str) -> bool:
+        if class_name not in self.classes:
+            return False
+        
+        if name in self.classes[class_name]["tests"]:
+            return False
+        
+        self.classes[class_name]["tests"][name] = {
+            "name": name,
+            "grade": Fraction(grade)
+        }
+        return True
+
+    def remove_test(self, class_name: str, name: str) -> bool:
+        if class_name not in self.classes:
+            return False
+        
+        if name not in self.classes[class_name]["tests"]:
+            return False
+
+        del self.classes[class_name]["tests"][name]
+        return True
+    #endregion
+
     # Calculations
+    #region
     def _get_scores(self, class_name: str, category: Literal["assignments", "tests"]) -> tuple[float | int, bool]:
         if category == "assignments":
-            assignments: list[dict] = self.classes.get(class_name).get("assignments")
+            assignments: dict = self.classes.get(class_name).get("assignments")
             assignment_weight: float = self.classes.get(class_name).get("assignment_weight")
             
             if not assignments:
@@ -93,7 +111,7 @@ class ClassHandler:
             average_assigments = 0
             count = 0
             for assignment in assignments:
-                average_assigments += assignment["score"].numerator / assignment["score"].denominator
+                average_assigments += assignments[assignment]["grade"].numerator / assignments[assignment]["grade"].denominator
                 count += 1
             
             average_assigments = average_assigments / count
@@ -110,7 +128,7 @@ class ClassHandler:
             average_tests = 0
             count = 0
             for test in tests:
-                average_tests += test["score"].numerator / test["score"].denominator
+                average_tests += tests[test]["grade"].numerator / tests[test]["grade"].denominator
                 count += 1
             
             average_tests = average_tests / count
@@ -139,3 +157,4 @@ class ClassHandler:
         result = round(overall_grade / active_weight, 4)
         self.classes[class_name]["percent"] = int(result * 100)
         return True
+    #endregion
