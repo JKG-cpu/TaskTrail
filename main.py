@@ -1,30 +1,27 @@
+from textual.app import App
+from os.path import join
+
+from ui import *
 from logic import *
-from pprint import pprint
 
-ch = ClassHandler()
+class TaskTrail(App):
+    theme = "tokyo-night"
+    BINDINGS = [("q", "quit", "Quit TaskTrail")]
+    SCREENS = {
+        "Home": HomePage
+    }
+    CSS_PATH = [join("styles", "base.tcss")]
 
-ch.add_class(
-    class_name = "AP CSP",
-    assignment_weight = 0.6,
-    test_weight = 0.4
-)
+    def on_mount(self) -> None:
+        self.push_screen("Home")
 
-ch.add_assignment(
-    class_name = "AP CSP",
-    name = "Test Assignment"
-)
-ch.check_completed_assignment(
-    class_name = "AP CSP",
-    assignment_name = "Test Assignment",
-    grade = "10/12"
-)
+    def action_quit(self):
+        self._clear_on_quit = True
+        return super().action_quit()
 
-ch.add_test(
-    class_name = "AP CSP",
-    name = "Unit Test",
-    grade = "5/10"
-)
+if __name__ == "__main__":
+    tasktrail = TaskTrail()
+    tasktrail.run()
 
-worked = ch.calculate_overall("AP CSP")
-
-pprint(ch.classes["AP CSP"])
+    if getattr(tasktrail, "_clear_on_quit", False):
+        cc()

@@ -1,0 +1,12 @@
+/* Widgets */
+Header {
+    height: 3;
+    align: center middle;
+}
+
+/* Classes */
+.main-container {
+    margin: 1 2;
+    padding: 1 2;
+    border: solid $panel;
+}
