@@ -5,7 +5,6 @@ __all__ = [
     "ClassHandler"
 ]
 
-
 class ClassHandler:
     def __init__(self) -> None:
         self.classes = {}

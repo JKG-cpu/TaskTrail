@@ -43,14 +43,17 @@ class LoginForm(ModalScreen):
 
 class CreateAccountForm(ModalScreen):
     def compose(self) -> ComposeResult:
-        yield Label("Create an account")
+        with Vertical(classes = "main-container") as vertical:
+            vertical.border_title = "Create an account"
+            vertical.styles.height = "auto"
+            vertical.styles.border_title_align = "center"
+            
+            yield Input(placeholder = "Enter in your username", id = "username")
+            yield Input(placeholder = "Enter in your password (Leave blank if no password set)", id = "password", password = True)
+            yield Input(placeholder = "Retype your password", id = "password2", password = True)
 
-        yield Input(placeholder = "Enter in your username", id = "username")
-        yield Input(placeholder = "Enter in your password (Leave blank if no password set)", id = "password", password = True)
-        yield Input(placeholder = "Retype your password", id = "password2", password = True)
-
-        yield Button("Sign In", id = "submit")
-        yield Button("Cancel", id = "cancel")
+            yield Button("Sign In", id = "submit")
+            yield Button("Cancel", id = "cancel")
     
     def on_button_pressed(self, event: Button.Pressed) -> None:
         if event.button.id == "submit":

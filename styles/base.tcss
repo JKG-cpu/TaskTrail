@@ -16,17 +16,17 @@ Header {
 
 Button {
     background: transparent;
-    border: round $primary;
+    border: solid $panel;
     text-style: none;
     width: 100%;
 }
 
 Button:hover {
-    border: round $secondary;
+    border: solid $primary;
 }
 
 Label {
-    border: round $secondary;
+    border: solid $panel;
     width: 100%;
     content-align: center middle;
 }
@@ -39,10 +39,10 @@ LoginForm, CreateAccountForm {
 .main-container {
     margin: 1 2;
     padding: 1 2;
-    border: round $primary;
+    border: solid $primary;
 }
 
 .sub-container {
     padding: 1;
-    border: round $primary;
+    border: solid $primary;
 }

@@ -1,9 +1,10 @@
 from textual.app import ComposeResult
 from textual.screen import Screen
-from textual.widgets import Header, Footer, Static, Button, Label
-from textual.containers import Vertical, VerticalScroll, Grid
+from textual.widgets import Header, Footer, Static, Button
+from textual.containers import Vertical, VerticalScroll, Horizontal, Grid
 
 from ..forms import *
+from ..widgets import *
 
 __all__ = [
     "HomePage"
@@ -18,9 +19,68 @@ class HomePage(Screen):
             grid.styles.grid_size_rows = 1
             grid.styles.grid_size_columns = 2
             with grid:
-                with VerticalScroll(classes="main-container") as classes_panel:
-                    classes_panel.border_title = "Classes"
-                    yield Static("Classes")
+                with VerticalScroll(classes="main-container"):
+                    yield ClassWidgetHandler(True, {
+                        "AP CPS": {
+                            "name": "AP CPS",
+                            "percent": 100,
+                            "assignment_weight": 0.5,
+                            "test_weight": 0.5,
+                            "assignments": {},
+                            "tests": {}
+                        },
+                        "AP CP": {
+                            "name": "AP CPS",
+                            "percent": 100,
+                            "assignment_weight": 0.5,
+                            "test_weight": 0.5,
+                            "assignments": {},
+                            "tests": {}
+                        },
+                        "AP CS": {
+                            "name": "AP CPS",
+                            "percent": 100,
+                            "assignment_weight": 0.5,
+                            "test_weight": 0.5,
+                            "assignments": {},
+                            "tests": {}
+                        },
+                        "AP PS": {
+                            "name": "AP CPS",
+                            "percent": 100,
+                            "assignment_weight": 0.5,
+                            "test_weight": 0.5,
+                            "assignments": {},
+                            "tests": {}
+                        },
+                        "APCPS": {
+                            "name": "AP CPS",
+                            "percent": 100,
+                            "assignment_weight": 0.5,
+                            "test_weight": 0.5,
+                            "assignments": {},
+                            "tests": {}
+                        },
+                        "A CPS": {
+                            "name": "AP CPS",
+                            "percent": 100,
+                            "assignment_weight": 0.5,
+                            "test_weight": 0.5,
+                            "assignments": {},
+                            "tests": {}
+                        }
+                    })
+
+                    with Horizontal(classes = "sub-container") as horizontal:
+                        horizontal.styles.height = "auto"
+
+                        button = Button("Add Class", classes = "add-class-btn")
+                        button.styles.width = "50%"
+                        yield button
+
+                        button = Button("Remove Class", classes = "remove-class-btn")
+                        button.styles.width = "50%"
+                        yield button
 
                 with Vertical(classes="main-container"):
                     static = Static("Assignments", classes="sub-container")
@@ -45,6 +105,13 @@ class HomePage(Screen):
         if event.button.has_class("create-account-btn"):
             self.app.push_screen(CreateAccountForm(), callback = self._create_account_callback)
 
+        if event.button.has_class("add-class-btn"):
+            self.app.push_screen(AddClassForm(), callback = self._add_class_callback)
+        
+        if event.button.has_class("remove-class-btn"):
+            # self.app.push_screen(RemoveClassForm(["Class 1", "Class 2"]), callback = self._remove_class_callback)
+            self.notify("Add class removal!")
+
     def _login_callback(self, data: dict | None) -> None:
         if data is None:
             return
@@ -52,6 +119,18 @@ class HomePage(Screen):
         self.notify(str(data))
     
     def _create_account_callback(self, data: dict | None) -> None:
+        if data is None:
+            return
+        
+        self.notify(str(data))
+
+    def _add_class_callback(self, data: dict | None) -> None:
+        if data is None:
+            return
+        
+        self.notify(str(data))
+
+    def _remove_class_callback(self, data: dict | None) -> None:
         if data is None:
             return
         
