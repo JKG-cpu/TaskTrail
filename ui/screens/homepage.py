@@ -109,8 +109,7 @@ class HomePage(Screen):
             self.app.push_screen(AddClassForm(), callback = self._add_class_callback)
         
         if event.button.has_class("remove-class-btn"):
-            # self.app.push_screen(RemoveClassForm(["Class 1", "Class 2"]), callback = self._remove_class_callback)
-            self.notify("Add class removal!")
+            self.app.push_screen(RemoveClassForm(["Class 1", "Class 2"]), callback = self._remove_class_callback)
 
     def _login_callback(self, data: dict | None) -> None:
         if data is None:

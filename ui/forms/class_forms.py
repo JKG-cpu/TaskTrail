@@ -4,7 +4,8 @@ from textual.widgets import Button, Input, ListView, ListItem, Label
 from textual.containers import Vertical
 
 __all__ = [
-    "AddClassForm"
+    "AddClassForm",
+    "RemoveClassForm"
 ]
 
 class AddClassForm(ModalScreen):
@@ -44,39 +45,38 @@ class AddClassForm(ModalScreen):
         data["test_weight"] = test_weight
         self.dismiss(data)
 
-# class RemoveClassForm(ModalScreen):
-#     def __init__(self, class_names: list[str]) -> None:
-#         super().__init__()
-#         self.class_names = class_names
+class RemoveClassForm(ModalScreen):
+    def __init__(self, class_names: list[str]) -> None:
+        super().__init__()
+        self.class_names = class_names
 
-#     def compose(self) -> ComposeResult:
-#         with Vertical(classes = "main-container") as vertical:
-#             vertical.border_title = "Create Class"
-#             vertical.styles.height = "auto"
-#             vertical.styles.border_title_align = "center"
+    def compose(self) -> ComposeResult:
+        with Vertical(classes = "main-container") as vertical:
+            vertical.border_title = "Create Class"
+            vertical.styles.height = "auto"
+            vertical.styles.border_title_align = "center"
 
-#             yield ListView(
-#                 *[ListItem(Label(class_name)) for class_name in self.class_names],
-#                 id = "class"
-#             )
+            yield ListView(
+                *[ListItem(Label(class_name), name = class_name) for class_name in self.class_names],
+                id = "class"
+            )
 
-#             yield Button("Remove Class", id = "remove-class")
-#             yield Button("Cancel", id = "cancel")
+            yield Button("Remove Class", id = "remove-class")
+            yield Button("Cancel", id = "cancel")
 
-#     def on_button_pressed(self, event: Button.Pressed) -> None:
-#         if event.button.id == "remove-class":
-#             self._remove_class()
+    def on_button_pressed(self, event: Button.Pressed) -> None:
+        if event.button.id == "remove-class":
+            self._remove_class()
 
-#         if event.button.id == "cancel":
-#             self.dismiss(None)
+        if event.button.id == "cancel":
+            self.dismiss(None)
 
-#     def _remove_class(self) -> None:
-#         list_view = self.query_one("#class", ListView)
+    def _remove_class(self) -> None:
+        list_view = self.query_one("#class", ListView)
+        selected = list_view.highlighted_child
 
-#         if list_view.highlighted_child is None:
-#             return
+        if selected is None:
+            return
 
-#         label = list_view.highlighted_child.query_one(Label)
-#         class_name = str(label.value)
-
-#         self.dismiss(class_name)
+        class_name = selected.name
+        self.dismiss(class_name)

@@ -31,7 +31,7 @@ Label {
     content-align: center middle;
 }
 
-LoginForm, CreateAccountForm {
+LoginForm, CreateAccountForm, AddClassForm, RemoveClassForm {
     align: center middle;
 }
 
