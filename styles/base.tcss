@@ -1,6 +1,37 @@
+/* Key Codes
+    $primary
+    $secondary
+    $background
+    $foreground
+    $surface
+    $panel
+    $accent
+*/
+
 /* Widgets */
 Header {
     height: 3;
+    align: center middle;
+}
+
+Button {
+    background: transparent;
+    border: round $primary;
+    text-style: none;
+    width: 100%;
+}
+
+Button:hover {
+    border: round $secondary;
+}
+
+Label {
+    border: round $secondary;
+    width: 100%;
+    content-align: center middle;
+}
+
+LoginForm, CreateAccountForm {
     align: center middle;
 }
 
@@ -8,5 +39,10 @@ Header {
 .main-container {
     margin: 1 2;
     padding: 1 2;
-    border: solid $panel;
+    border: round $primary;
+}
+
+.sub-container {
+    padding: 1;
+    border: round $primary;
 }
