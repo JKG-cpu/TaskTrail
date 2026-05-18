@@ -5,12 +5,17 @@ from textual.containers import Vertical, VerticalScroll, Horizontal, Grid
 
 from ..forms import *
 from ..widgets import *
+from ...logic import ClassHandler
 
 __all__ = [
     "HomePage"
 ]
 
 class HomePage(Screen):
+    def __init__(self) -> None:
+        super().__init__()
+        self.class_handler = ClassHandler()
+
     def compose(self) -> ComposeResult:
         yield Header()
 
@@ -20,56 +25,7 @@ class HomePage(Screen):
             grid.styles.grid_size_columns = 2
             with grid:
                 with VerticalScroll(classes="main-container"):
-                    yield ClassWidgetHandler(True, {
-                        "AP CPS": {
-                            "name": "AP CPS",
-                            "percent": 100,
-                            "assignment_weight": 0.5,
-                            "test_weight": 0.5,
-                            "assignments": {},
-                            "tests": {}
-                        },
-                        "AP CP": {
-                            "name": "AP CPS",
-                            "percent": 100,
-                            "assignment_weight": 0.5,
-                            "test_weight": 0.5,
-                            "assignments": {},
-                            "tests": {}
-                        },
-                        "AP CS": {
-                            "name": "AP CPS",
-                            "percent": 100,
-                            "assignment_weight": 0.5,
-                            "test_weight": 0.5,
-                            "assignments": {},
-                            "tests": {}
-                        },
-                        "AP PS": {
-                            "name": "AP CPS",
-                            "percent": 100,
-                            "assignment_weight": 0.5,
-                            "test_weight": 0.5,
-                            "assignments": {},
-                            "tests": {}
-                        },
-                        "APCPS": {
-                            "name": "AP CPS",
-                            "percent": 100,
-                            "assignment_weight": 0.5,
-                            "test_weight": 0.5,
-                            "assignments": {},
-                            "tests": {}
-                        },
-                        "A CPS": {
-                            "name": "AP CPS",
-                            "percent": 100,
-                            "assignment_weight": 0.5,
-                            "test_weight": 0.5,
-                            "assignments": {},
-                            "tests": {}
-                        }
-                    })
+                    yield ClassWidgetHandler(True, self.class_handler.classes)
 
                     with Horizontal(classes = "sub-container") as horizontal:
                         horizontal.styles.height = "auto"
@@ -109,7 +65,7 @@ class HomePage(Screen):
             self.app.push_screen(AddClassForm(), callback = self._add_class_callback)
         
         if event.button.has_class("remove-class-btn"):
-            self.app.push_screen(RemoveClassForm(["Class 1", "Class 2"]), callback = self._remove_class_callback)
+            self.app.push_screen(RemoveClassForm(self.class_handler.get_class_names()), callback = self._remove_class_callback)
 
     def _login_callback(self, data: dict | None) -> None:
         if data is None:
@@ -127,10 +83,23 @@ class HomePage(Screen):
         if data is None:
             return
         
-        self.notify(str(data))
+        self.class_handler.add_class(
+            class_name = data["class_name"],
+            assignment_weight = data["assignment_weight"],
+            test_weight = data["test_weight"]
+        )
 
-    def _remove_class_callback(self, data: dict | None) -> None:
+        self.refresh(recompose = True)
+
+    def _remove_class_callback(self, data: str | None) -> None:
         if data is None:
             return
-        
-        self.notify(str(data))
+
+        valid = self.class_handler.remove_class(data)
+
+        if valid:
+            self.notify(f"Removed class: {data}")
+            self.refresh(recompose = True)
+
+        else:
+            raise ValueError(f"Invalid class: {valid}")

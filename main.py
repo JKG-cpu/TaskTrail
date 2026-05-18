@@ -1,8 +1,7 @@
 from textual.app import App
 from os.path import join
 
-from ui import *
-from logic import *
+from src import *
 
 class TaskTrail(App):
     theme = "tokyo-night"

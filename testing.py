@@ -1,4 +1,4 @@
-from logic import *
+from src.logic import *
 from pprint import pprint
 
 ch = ClassHandler()

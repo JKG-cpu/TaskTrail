@@ -20,7 +20,7 @@ class ClassWidgets(Static):
             vertical.styles.border_title_align = "center"
             vertical.styles.height = "auto"
 
-            static = Static(str(self.percent) + "% Overall")
+            static = Static(str(self.percent) if self.percent else "100" + "% Overall")
             static.styles.content_align = ("center", "middle")
             yield static
 

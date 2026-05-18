@@ -157,3 +157,9 @@ class ClassHandler:
         self.classes[class_name]["percent"] = int(result * 100)
         return True
     #endregion
+
+    # Get Data
+    #region
+    def get_class_names(self) -> list[str]:
+        return list(self.classes.keys())
+    #endregion
