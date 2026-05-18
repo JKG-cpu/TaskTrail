@@ -59,7 +59,7 @@ class RemoveClassForm(ModalScreen):
             if self.class_names:
                 yield ListView(
                     *[ListItem(Label(class_name), name = class_name) for class_name in self.class_names],
-                    id = "class"
+                    classes = "class_names"
                 )
 
                 yield Button("Remove Class", id = "remove-class")
@@ -81,7 +81,7 @@ class RemoveClassForm(ModalScreen):
             self.dismiss(None)
 
     def _remove_class(self) -> None:
-        list_view = self.query_one("#class", ListView)
+        list_view = self.query_one(".class_names", ListView)
         selected = list_view.highlighted_child
 
         if selected is None:

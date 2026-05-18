@@ -1,7 +1,15 @@
 from textual.app import ComposeResult
 from textual.screen import Screen
-from textual.widgets import Header, Footer, Static, Button
-from textual.containers import Vertical, VerticalScroll, Horizontal, Grid
+from textual.widgets import (
+    Header, Footer, 
+    Static, Label, Button, 
+    TabbedContent, TabPane, Tabs,
+    ListView, ListItem
+)
+from textual.containers import (
+    Vertical, VerticalScroll, 
+    Horizontal, Grid
+)
 
 from ..forms import *
 from ..widgets import *
@@ -19,38 +27,12 @@ class HomePage(Screen):
     def compose(self) -> ComposeResult:
         yield Header()
 
-        with Vertical():
-            grid = Grid()
-            grid.styles.grid_size_rows = 1
-            grid.styles.grid_size_columns = 2
-            with grid:
-                with VerticalScroll(classes="main-container"):
-                    yield ClassWidgetHandler(True, self.class_handler.classes)
-
-                    with Horizontal(classes = "sub-container") as horizontal:
-                        horizontal.styles.height = "auto"
-
-                        button = Button("Add Class", classes = "add-class-btn")
-                        button.styles.width = "50%"
-                        yield button
-
-                        button = Button("Remove Class", classes = "remove-class-btn")
-                        button.styles.width = "50%"
-                        yield button
-
-                with Vertical(classes="main-container"):
-                    static = Static("Assignments", classes="sub-container")
-                    static.border_title = "Assignments"
-                    static.styles.height = "1fr"
-                    yield static
-
-                    vertical = Vertical(classes = "sub-container")
-                    vertical.border_title = "User Account"
-                    vertical.styles.height = "auto"
-
-                    with vertical:
-                        yield Button("Log in", classes = "login-btn")
-                        yield Button("Create Account", classes = "create-account-btn")
+        with TabbedContent():
+            with TabPane("HomePage", id = "homePage-tab"):
+                yield HomeTab(self.class_handler)
+            
+            with TabPane("Assignments", id = "assignments-tab"):
+                yield AssignmentsTab(self.class_handler)
 
         yield Footer()
     
@@ -67,6 +49,8 @@ class HomePage(Screen):
         if event.button.has_class("remove-class-btn"):
             self.app.push_screen(RemoveClassForm(self.class_handler.get_class_names()), callback = self._remove_class_callback)
 
+    # Callbacks
+    #region
     def _login_callback(self, data: dict | None) -> None:
         if data is None:
             return
@@ -103,3 +87,4 @@ class HomePage(Screen):
 
         else:
             raise ValueError(f"Invalid class: {valid}")
+    #endregion

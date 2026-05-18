@@ -35,6 +35,20 @@ LoginForm, CreateAccountForm, AddClassForm, RemoveClassForm {
     align: center middle;
 }
 
+ListItem {
+    background: transparent;
+    border: none;
+}
+
+ListItem.selected {
+    border: solid $primary;
+}
+
+ListView {
+    background: transparent;
+    height: 1fr;
+}
+
 /* Classes */
 .main-container {
     margin: 1 2;
