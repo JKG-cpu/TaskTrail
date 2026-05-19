@@ -1,7 +1,7 @@
 from textual.app import ComposeResult
 from textual.containers import (
     Grid,
-    Vertical,
+    Vertical, VerticalScroll,
     Horizontal
 )
 from textual.widgets import (
@@ -10,10 +10,12 @@ from textual.widgets import (
 )
 
 from ...logic import ClassHandler
+from ..forms import *
 from .class_widgets import *
 
 __all__ = [
     "HomeTab",
+    "ClassesTab",
     "AssignmentsTab"
 ]
 
@@ -54,6 +56,59 @@ class HomeTab(Vertical):
                 with vertical:
                     yield Button("Log in", classes = "login-btn")
                     yield Button("Create Account", classes = "create-account-btn")
+
+class ClassesTab(Vertical):
+    def __init__(self, class_handler: ClassHandler) -> None:
+        super().__init__()
+        self.class_handler = class_handler
+
+    def compose(self) -> ComposeResult:
+        widget = ClassWidgetHandler(True, self.class_handler.classes)
+        widget.styles.height = "1fr"
+        yield widget
+
+        with Horizontal(classes = "main-container") as horizontal:
+            horizontal.styles.height = "auto"
+
+            button = Button("Add Class", classes = "add-class-btn")
+            button.styles.width = "50%"
+            yield button
+
+            button = Button("Remove Class", classes = "remove-class-btn")
+            button.styles.width = "50%"
+            yield button
+
+    def _add_class_callback(self, data: dict | None) -> None:
+        if data is None:
+            return
+        
+        self.class_handler.add_class(
+            class_name = data["class_name"],
+            assignment_weight = data["assignment_weight"],
+            test_weight = data["test_weight"]
+        )
+
+        self.refresh(recompose = True)
+
+    def on_button_pressed(self, event: Button.Pressed) -> None:
+        if event.button.has_class("add-class-btn"):
+            self.app.push_screen(AddClassForm(), callback = self._add_class_callback)
+        
+        if event.button.has_class("remove-class-btn"):
+            self.app.push_screen(RemoveClassForm(self.class_handler.get_class_names()), callback = self._remove_class_callback)
+
+    def _remove_class_callback(self, data: str | None) -> None:
+        if data is None:
+            return
+
+        valid = self.class_handler.remove_class(data)
+
+        if valid:
+            self.notify(f"Removed class: {data}")
+            self.refresh(recompose = True)
+
+        else:
+            raise ValueError(f"Invalid class: {valid}")
 
 class AssignmentsTab(Vertical):
     def __init__(self, class_handler: ClassHandler) -> None:
