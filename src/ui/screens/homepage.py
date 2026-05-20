@@ -29,9 +29,6 @@ class HomePage(Screen):
             with TabPane("Classes", id = "classes-tab"):
                 yield ClassesTab(self.class_handler)
 
-            with TabPane("Assignments", id = "assignments-tab"):
-                yield AssignmentsTab(self.class_handler)
-
         yield Footer(show_command_palette = False)
 
     def on_button_pressed(self, event: Button.Pressed) -> None:
@@ -54,4 +51,10 @@ class HomePage(Screen):
             return
         
         self.notify(str(data))
+    #endregion
+
+    # Events
+    #region
+    def on_classes_tab_class_changed(self, event: ClassesTab.ClassChanged) -> None:
+        self.query_one(HomeTab).refresh(recompose=True)
     #endregion

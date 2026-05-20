@@ -1,7 +1,8 @@
 from textual.app import ComposeResult
+from textual.message import Message
 from textual.containers import (
     Grid,
-    Vertical, VerticalScroll,
+    Vertical,
     Horizontal
 )
 from textual.widgets import (
@@ -32,17 +33,6 @@ class HomeTab(Vertical):
             with Vertical(classes="main-container"):
                 yield ClassWidgetHandler(True, self.class_handler.classes)
 
-                with Horizontal(classes = "sub-container") as horizontal:
-                    horizontal.styles.height = "auto"
-
-                    button = Button("Add Class", classes = "add-class-btn")
-                    button.styles.width = "50%"
-                    yield button
-
-                    button = Button("Remove Class", classes = "remove-class-btn")
-                    button.styles.width = "50%"
-                    yield button
-
             with Vertical(classes="main-container"):
                 static = Static("Assignments", classes="sub-container")
                 static.border_title = "Assignments"
@@ -58,25 +48,29 @@ class HomeTab(Vertical):
                     yield Button("Create Account", classes = "create-account-btn")
 
 class ClassesTab(Vertical):
+    class ClassChanged(Message):
+        pass
+
     def __init__(self, class_handler: ClassHandler) -> None:
         super().__init__()
         self.class_handler = class_handler
 
     def compose(self) -> ComposeResult:
-        widget = ClassWidgetHandler(True, self.class_handler.classes)
-        widget.styles.height = "1fr"
-        yield widget
+        with Vertical(classes = "main-container"):
+            widget = ClassWidgetHandler(True, self.class_handler.classes)
+            widget.styles.height = "1fr"
+            yield widget
 
-        with Horizontal(classes = "main-container") as horizontal:
-            horizontal.styles.height = "auto"
+            with Horizontal(classes = "sub-container") as horizontal:
+                horizontal.styles.height = "auto"
 
-            button = Button("Add Class", classes = "add-class-btn")
-            button.styles.width = "50%"
-            yield button
+                button = Button("Add Class", classes = "add-class-btn")
+                button.styles.width = "50%"
+                yield button
 
-            button = Button("Remove Class", classes = "remove-class-btn")
-            button.styles.width = "50%"
-            yield button
+                button = Button("Remove Class", classes = "remove-class-btn")
+                button.styles.width = "50%"
+                yield button
 
     def _add_class_callback(self, data: dict | None) -> None:
         if data is None:
@@ -89,6 +83,7 @@ class ClassesTab(Vertical):
         )
 
         self.refresh(recompose = True)
+        self.post_message(self.ClassChanged())
 
     def on_button_pressed(self, event: Button.Pressed) -> None:
         if event.button.has_class("add-class-btn"):
@@ -106,6 +101,7 @@ class ClassesTab(Vertical):
         if valid:
             self.notify(f"Removed class: {data}")
             self.refresh(recompose = True)
+            self.post_message(self.ClassChanged())
 
         else:
             raise ValueError(f"Invalid class: {valid}")

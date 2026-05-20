@@ -42,7 +42,7 @@ class ClassWidgetHandler(Static):
 
     def compose(self) -> ComposeResult:
         if self.logged_in:
-            with VerticalScroll(classes = "main-container") as vertical:
+            with VerticalScroll(classes = "sub-container") as vertical:
                 vertical.border_title = "Classes"
                 vertical.styles.scrollbar_visibility = "hidden"
                 
