@@ -1,37 +1,38 @@
 from textual.app import ComposeResult
-from textual.widgets import Static, Label
+from textual.widgets import Static, Label, Button
 from textual.containers import VerticalScroll, Vertical
+
+from ..forms import EditClassForm
 
 __all__ = [
     "ClassWidgetHandler"
 ]
 
-class ClassWidgets(Static):
+class ClassWidgets(Button):
     def __init__(self, class_name: str, percent: int | None, assignment_weight: float, test_weight: float) -> None:
         super().__init__()
         self.class_name = class_name
+        self.id = class_name
         self.percent = percent
         self.assignment_weight = assignment_weight
         self.test_weight = test_weight
 
     def compose(self):
-        with Vertical(classes = "sub-container") as vertical:
-            vertical.border_title = self.class_name
-            vertical.styles.border_title_align = "center"
-            vertical.styles.height = "auto"
+        self.border_title = self.class_name
+        self.styles.border_title_align = "center"
 
-            static = Static(str(self.percent) if self.percent else "100" + "% Overall")
-            static.styles.content_align = ("center", "middle")
-            yield static
+        static = Static(str(self.percent) if self.percent else "100" + "% Overall")
+        static.styles.content_align = ("center", "middle")
+        yield static
 
-            static = Static(f"Assignments: {self.assignment_weight} percent of overall grade.")
-            static.styles.content_align = ("center", "middle")
-            yield static
+        static = Static(f"Assignments: {self.assignment_weight} percent of overall grade.")
+        static.styles.content_align = ("center", "middle")
+        yield static
 
-            static = Static(f"Tests: {self.test_weight} percent of overall grade.")
-            static.styles.content_align = ("center", "middle")
-            yield static
-    
+        static = Static(f"Tests: {self.test_weight} percent of overall grade.")
+        static.styles.content_align = ("center", "middle")
+        yield static
+
 class ClassWidgetHandler(Static):
     def __init__(self, logged_in: bool, class_data: dict[str, dict]) -> None:
         super().__init__()
@@ -66,3 +67,18 @@ class ClassWidgetHandler(Static):
                 static.styles.content_align = ("center", "middle")
                 static.styles.height = "1fr"
                 yield static
+    
+    def on_button_pressed(self, event: Button.Pressed) -> None:
+        if event.button.id in self.class_names:
+            name = event.button.id
+            self.app.push_screen(EditClassForm(
+                class_name = name,
+                assignment_weight = self.class_data.get(name)["assignment_weight"],
+                test_weight = self.class_data.get(name)["assignment_weight"]
+            ), callback = self._handle_edits)
+
+    def _handle_edits(self, data: dict | None) -> None:
+        if data is None:
+            return
+        
+        self.notify(str(data))

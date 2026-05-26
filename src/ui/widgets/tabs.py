@@ -76,14 +76,18 @@ class ClassesTab(Vertical):
         if data is None:
             return
         
-        self.class_handler.add_class(
+        valid = self.class_handler.add_class(
             class_name = data["class_name"],
             assignment_weight = data["assignment_weight"],
             test_weight = data["test_weight"]
         )
 
-        self.refresh(recompose = True)
-        self.post_message(self.ClassChanged())
+        if valid:
+            self.refresh(recompose = True)
+            self.post_message(self.ClassChanged())
+
+        else:
+            self.notify("That class already exists!", severity = "error")
 
     def on_button_pressed(self, event: Button.Pressed) -> None:
         if event.button.has_class("add-class-btn"):

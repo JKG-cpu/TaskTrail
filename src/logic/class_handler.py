@@ -31,6 +31,9 @@ class ClassHandler:
 
         del self.classes[class_name]
         return True
+    
+    def modify_class(self, class_name: str) -> bool:
+        pass
     #endregion
 
     # Manage Assignments

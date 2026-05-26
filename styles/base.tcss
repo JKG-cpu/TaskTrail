@@ -49,6 +49,15 @@ ListView {
     height: 1fr;
 }
 
+Input {
+    background: transparent;
+    border: solid $panel;
+}
+
+Input:focus {
+    border: solid $primary;
+}
+
 /* Classes */
 .main-container {
     margin: 1 2;
@@ -58,5 +67,10 @@ ListView {
 
 .sub-container {
     padding: 1;
+    border: solid $primary;
+}
+
+.class-edit {
+    border-title-align: center;
     border: solid $primary;
 }

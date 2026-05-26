@@ -1,6 +1,6 @@
 from textual.app import ComposeResult
 from textual.screen import ModalScreen
-from textual.widgets import Label, Input, Button
+from textual.widgets import Input, Button
 from textual.containers import Vertical
 
 __all__ = [
