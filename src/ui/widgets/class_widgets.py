@@ -1,6 +1,7 @@
 from textual.app import ComposeResult
 from textual.widgets import Static, Label, Button
 from textual.containers import VerticalScroll, Vertical
+from textual.message import Message
 
 from ..forms import EditClassForm
 from ...logic import *
@@ -13,7 +14,6 @@ class ClassWidgets(Button):
     def __init__(self, class_name: str, percent: int | None, assignment_weight: float, test_weight: float) -> None:
         super().__init__()
         self.class_name = class_name
-        self.id = class_name
         self.percent = percent
         self.assignment_weight = assignment_weight
         self.test_weight = test_weight
@@ -35,6 +35,9 @@ class ClassWidgets(Button):
         yield static
 
 class ClassWidgetHandler(Static):
+    class ClassEdited(Message):
+        pass
+
     def __init__(self, class_handler: ClassHandler, logged_in: bool, class_data: dict[str, dict]) -> None:
         super().__init__()
         self.styles.height = "1fr"
@@ -73,13 +76,14 @@ class ClassWidgetHandler(Static):
                 yield static
     
     def on_button_pressed(self, event: Button.Pressed) -> None:
-        if event.button.id in self.class_names:
-            self.selected_class_name = event.button.id
-            self.app.push_screen(EditClassForm(
-                class_name = self.selected_class_name,
-                assignment_weight = self.class_data.get(self.selected_class_name)["assignment_weight"],
-                test_weight = self.class_data.get(self.selected_class_name)["assignment_weight"]
-            ), callback = self._handle_edits)
+        if hasattr(event.button, "class_name"):
+            if event.button.class_name in self.class_names:
+                self.selected_class_name = event.button.class_name
+                self.app.push_screen(EditClassForm(
+                    class_name = self.selected_class_name,
+                    assignment_weight = self.class_data.get(self.selected_class_name)["assignment_weight"],
+                    test_weight = self.class_data.get(self.selected_class_name)["assignment_weight"]
+                ), callback = self._handle_edits)
 
     def _handle_edits(self, data: dict | None) -> None:
         if data is None:
@@ -93,7 +97,10 @@ class ClassWidgetHandler(Static):
         )
 
         if valid:
+            self.class_data = self.class_handler.classes
+            self.class_names = list(self.class_data.keys())
             self.notify("Saved class changes!")
+            self.post_message(self.ClassEdited())
         
         else:
             self.notify("Couldn't save class data!", severity = "error")

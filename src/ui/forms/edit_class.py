@@ -82,13 +82,13 @@ class EditClassForm(ModalScreen):
         assignment = self.query_one("#assignment_weight", Input).value
         tests = self.query_one("#test_weight", Input).value
 
-        if data["name"] != class_name:
+        if data["name"] != class_name and class_name:
             data["name"] = class_name
 
-        if data["assignment"] != assignment:
+        if data["assignment"] != assignment and assignment:
             data["assignment"] = assignment
 
-        if data["test"] != tests:
+        if data["test"] != tests and assignment:
             data["test"] = tests
 
         self.dismiss(data)

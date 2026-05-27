@@ -47,6 +47,9 @@ class HomeTab(Vertical):
                     yield Button("Log in", classes = "login-btn")
                     yield Button("Create Account", classes = "create-account-btn")
 
+    def on_class_widget_handler_class_edited(self) -> None:
+        self.refresh(recompose=True)
+
 class ClassesTab(Vertical):
     class ClassChanged(Message):
         pass
@@ -109,6 +112,9 @@ class ClassesTab(Vertical):
 
         else:
             raise ValueError(f"Invalid class: {valid}")
+
+    def on_class_widget_handler_class_edited(self) -> None:
+        self.refresh(recompose=True)
 
 class AssignmentsTab(Vertical):
     def __init__(self, class_handler: ClassHandler) -> None:
