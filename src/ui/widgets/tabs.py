@@ -31,7 +31,7 @@ class HomeTab(Vertical):
         grid.styles.grid_size_columns = 2
         with grid:
             with Vertical(classes="main-container"):
-                yield ClassWidgetHandler(True, self.class_handler.classes)
+                yield ClassWidgetHandler(class_handler = self.class_handler, logged_in = True, class_data = self.class_handler.classes)
 
             with Vertical(classes="main-container"):
                 static = Static("Assignments", classes="sub-container")
@@ -57,7 +57,7 @@ class ClassesTab(Vertical):
 
     def compose(self) -> ComposeResult:
         with Vertical(classes = "main-container"):
-            widget = ClassWidgetHandler(True, self.class_handler.classes)
+            widget = ClassWidgetHandler(self.class_handler, True, self.class_handler.classes)
             widget.styles.height = "1fr"
             yield widget
 

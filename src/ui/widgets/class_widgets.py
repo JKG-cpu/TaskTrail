@@ -3,6 +3,7 @@ from textual.widgets import Static, Label, Button
 from textual.containers import VerticalScroll, Vertical
 
 from ..forms import EditClassForm
+from ...logic import *
 
 __all__ = [
     "ClassWidgetHandler"
@@ -34,9 +35,12 @@ class ClassWidgets(Button):
         yield static
 
 class ClassWidgetHandler(Static):
-    def __init__(self, logged_in: bool, class_data: dict[str, dict]) -> None:
+    def __init__(self, class_handler: ClassHandler, logged_in: bool, class_data: dict[str, dict]) -> None:
         super().__init__()
         self.styles.height = "1fr"
+
+        self.class_handler = class_handler
+        self.selected_class_name = ""
         self.logged_in = logged_in
         self.class_data = class_data
         self.class_names: list[str] = list(self.class_data.keys())
@@ -70,15 +74,26 @@ class ClassWidgetHandler(Static):
     
     def on_button_pressed(self, event: Button.Pressed) -> None:
         if event.button.id in self.class_names:
-            name = event.button.id
+            self.selected_class_name = event.button.id
             self.app.push_screen(EditClassForm(
-                class_name = name,
-                assignment_weight = self.class_data.get(name)["assignment_weight"],
-                test_weight = self.class_data.get(name)["assignment_weight"]
+                class_name = self.selected_class_name,
+                assignment_weight = self.class_data.get(self.selected_class_name)["assignment_weight"],
+                test_weight = self.class_data.get(self.selected_class_name)["assignment_weight"]
             ), callback = self._handle_edits)
 
     def _handle_edits(self, data: dict | None) -> None:
         if data is None:
             return
         
-        self.notify(str(data))
+        valid = self.class_handler.modify_class(
+            class_name = self.selected_class_name,
+            new_name = data["name"],
+            assignment_weight = data["assignment"],
+            test_weight = data["test"]
+        )
+
+        if valid:
+            self.notify("Saved class changes!")
+        
+        else:
+            self.notify("Couldn't save class data!", severity = "error")

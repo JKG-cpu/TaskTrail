@@ -32,8 +32,14 @@ class ClassHandler:
         del self.classes[class_name]
         return True
     
-    def modify_class(self, class_name: str) -> bool:
-        pass
+    def modify_class(self, class_name: str, new_name: str, assignment_weight: float, test_weight: float) -> bool:
+        if class_name not in self.classes:
+            return False
+        
+        del self.classes[class_name]
+
+        self.add_class(new_name, assignment_weight, test_weight)
+        return True
     #endregion
 
     # Manage Assignments

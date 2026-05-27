@@ -25,8 +25,9 @@ class EditClassForm(ModalScreen):
 
             with Horizontal(classes = "class-edit") as h:
                 h.border_title = "Change class Name"
+                h.styles.height = "auto"
 
-                ipt = Input(placeholder = "Change class name")
+                ipt = Input(placeholder = "Change class name", id = "class_name")
                 ipt.styles.width = "50%"
                 yield ipt
 
@@ -38,20 +39,23 @@ class EditClassForm(ModalScreen):
                 g.border_title = "Grade Weights"
                 g.styles.grid_size_columns = 2
                 g.styles.grid_size_rows = 2
+                g.styles.height = "auto"
 
-                ipt = Input(placeholder = "Change Assignment Weight (integer)", type = "number")
+                ipt = Input(placeholder = "Change Assignment Weight (integer)", id = "assignment_weight", type = "number")
                 yield ipt
 
                 label = Label(f"Current Assignment Weight: {self.assignment_weight}")
                 yield label
 
-                ipt = Input(placeholder = "Change Assignment Weight (integer)", type = "number")
+                ipt = Input(placeholder = "Change Assignment Weight (integer)", id = "test_weight", type = "number")
                 yield ipt
 
                 label = Label(f"Current Test Weight: {self.test_weight}")
                 yield label
 
             with Horizontal(classes = "class-edit") as h:
+                h.styles.height = "auto"
+
                 save = Button("Save and exit", id = "save")
                 save.styles.width = "50%"
                 yield save
@@ -67,11 +71,27 @@ class EditClassForm(ModalScreen):
         if event.button.id == "cancel":
             self.dismiss(None)
 
-    def _handle_item(self, data: dict) -> None:
-        pass
-
     def _handle_submission(self) -> None:
-        pass
+        data = {
+            "name": self.class_name,
+            "assignment": self.assignment_weight,
+            "test": self.test_weight
+        }
+
+        class_name = self.query_one("#class_name", Input).value
+        assignment = self.query_one("#assignment_weight", Input).value
+        tests = self.query_one("#test_weight", Input).value
+
+        if data["name"] != class_name:
+            data["name"] = class_name
+
+        if data["assignment"] != assignment:
+            data["assignment"] = assignment
+
+        if data["test"] != tests:
+            data["test"] = tests
+
+        self.dismiss(data)
 
 class AddGrade(ModalScreen):
     pass
