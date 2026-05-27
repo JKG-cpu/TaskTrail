@@ -24,18 +24,19 @@ class HomeTab(Vertical):
     def __init__(self, class_handler: ClassHandler):
         super().__init__()
         self.class_handler = class_handler
+        self.classes = "main-container"
 
     # Display
     #region
     def compose(self) -> ComposeResult:
-        grid = Grid()
-        grid.styles.grid_size_rows = 1
-        grid.styles.grid_size_columns = 2
-        with grid:
-            with Vertical(classes="main-container"):
+        with Grid() as grid:
+            grid.styles.grid_size_rows = 1
+            grid.styles.grid_size_columns = 2
+            
+            with Vertical():
                 yield ClassWidgetHandler(class_handler = self.class_handler, logged_in = True, class_data = self.class_handler.classes)
 
-            with Vertical(classes="main-container"):
+            with Vertical():
                 static = Static("Assignments", classes="sub-container")
                 static.border_title = "Assignments"
                 static.styles.height = "1fr"
@@ -63,11 +64,12 @@ class ClassesTab(Vertical):
     def __init__(self, class_handler: ClassHandler) -> None:
         super().__init__()
         self.class_handler = class_handler
+        self.classes = "main-container"
 
     # Display
     #region
     def compose(self) -> ComposeResult:
-        with Vertical(classes = "main-container"):
+        with Vertical():
             widget = ClassWidgetHandler(self.class_handler, True, self.class_handler.classes)
             widget.styles.height = "1fr"
             yield widget
@@ -136,35 +138,49 @@ class AssignmentsTab(Vertical):
         super().__init__()
         self.class_handler = class_handler
         self.selected_class: str | None = None
-    
+        self.classes = "main-container"
+
+    # Display
+    #region
     def compose(self) -> ComposeResult:
-        if self.selected_class is None:
-            if self.class_handler.get_class_names():
-                yield ListView(
-                    *[ListItem(Label(class_name), name = class_name) for class_name in self.class_handler.get_class_names()],
-                    classes = "class_names"
-                )
-                yield Button("Select a class", id = "select-class")
+        with Grid() as g:
+            yield Label("Hello")
+    #endregion
 
-            else:
-                yield Label("You have no classes!")
+# class AssignmentsTab(Vertical):
+#     def __init__(self, class_handler: ClassHandler) -> None:
+#         super().__init__()
+#         self.class_handler = class_handler
+#         self.selected_class: str | None = None
+    
+#     def compose(self) -> ComposeResult:
+#         if self.selected_class is None:
+#             if self.class_handler.get_class_names():
+#                 yield ListView(
+#                     *[ListItem(Label(class_name), name = class_name) for class_name in self.class_handler.get_class_names()],
+#                     classes = "class_names"
+#                 )
+#                 yield Button("Select a class", id = "select-class")
 
-        else:
-            yield Label(f"Selected class: {self.selected_class}")
+#             else:
+#                 yield Label("You have no classes!")
 
-    def on_button_pressed(self, event: Button.Pressed) -> None:
-        if event.button.id == "select-class":
-            self._select_class()
+#         else:
+#             yield Label(f"Selected class: {self.selected_class}")
 
-    def _select_class(self) -> None:
-        list_view = self.query_one(".class_names", ListView)
-        selected = list_view.highlighted_child
+#     def on_button_pressed(self, event: Button.Pressed) -> None:
+#         if event.button.id == "select-class":
+#             self._select_class()
 
-        if selected is None:
-            self.notify("You must select a class!", severity = "error")
-            return
+#     def _select_class(self) -> None:
+#         list_view = self.query_one(".class_names", ListView)
+#         selected = list_view.highlighted_child
 
-        self.selected_class = selected.name
-        self.notify(f"Selected class: {self.selected_class}")
-        self.refresh(recompose = True)
+#         if selected is None:
+#             self.notify("You must select a class!", severity = "error")
+#             return
+
+#         self.selected_class = selected.name
+#         self.notify(f"Selected class: {self.selected_class}")
+#         self.refresh(recompose = True)
 

@@ -31,6 +31,9 @@ class HomePage(Screen):
             with TabPane("Classes", id = "classes-tab"):
                 yield ClassesTab(self.class_handler)
 
+            with TabPane("Assignments", id = "assignments-tab"):
+                yield AssignmentsTab(self.class_handler)
+
         yield Footer(show_command_palette = False)
     #endregion
 
