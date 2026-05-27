@@ -18,7 +18,7 @@ class ClassWidgets(Button):
         self.assignment_weight = assignment_weight
         self.test_weight = test_weight
 
-    # Details
+    # Display
     #region
     def compose(self):
         self.border_title = self.class_name
@@ -41,7 +41,12 @@ class ClassWidgetHandler(Static):
     class ClassEdited(Message):
         pass
 
-    def __init__(self, class_handler: ClassHandler, logged_in: bool, class_data: dict[str, dict]) -> None:
+    class ClassSelected(Message):
+        def __init__(self, class_name: str) -> None:
+            super().__init__()
+            self.class_name = class_name
+
+    def __init__(self, class_handler: ClassHandler, logged_in: bool, class_data: dict[str, dict], editting: bool = True) -> None:
         super().__init__()
         self.styles.height = "1fr"
 
@@ -50,8 +55,9 @@ class ClassWidgetHandler(Static):
         self.logged_in = logged_in
         self.class_data = class_data
         self.class_names: list[str] = list(self.class_data.keys())
+        self.editting = editting
 
-    # Details
+    # Display
     #region
     def compose(self) -> ComposeResult:
         if self.logged_in:
@@ -85,13 +91,16 @@ class ClassWidgetHandler(Static):
     #region
     def on_button_pressed(self, event: Button.Pressed) -> None:
         if hasattr(event.button, "class_name"):
-            if event.button.class_name in self.class_names:
+            if event.button.class_name in self.class_names and self.editting:
                 self.selected_class_name = event.button.class_name
                 self.app.push_screen(EditClassForm(
                     class_name = self.selected_class_name,
                     assignment_weight = self.class_data.get(self.selected_class_name)["assignment_weight"],
                     test_weight = self.class_data.get(self.selected_class_name)["assignment_weight"]
                 ), callback = self._handle_edits)
+            
+            elif event.button.class_name in self.class_names:
+                self.post_message(self.ClassSelected(event.button.class_name))
     #endregion
 
     # Helpers

@@ -144,43 +144,24 @@ class AssignmentsTab(Vertical):
     #region
     def compose(self) -> ComposeResult:
         with Grid() as g:
-            yield Label("Hello")
+            g.styles.grid_size_columns = 2
+
+            with Vertical(): yield ClassWidgetHandler(
+                class_handler = self.class_handler, 
+                logged_in = True, 
+                class_data = self.class_handler.classes, 
+                editting = False
+            )
+
+            with Vertical() as v:
+                v.border_title = "Assignments"
+                v.styles.border_title_align = "center"
+                yield Label("Hello")
     #endregion
 
-# class AssignmentsTab(Vertical):
-#     def __init__(self, class_handler: ClassHandler) -> None:
-#         super().__init__()
-#         self.class_handler = class_handler
-#         self.selected_class: str | None = None
-    
-#     def compose(self) -> ComposeResult:
-#         if self.selected_class is None:
-#             if self.class_handler.get_class_names():
-#                 yield ListView(
-#                     *[ListItem(Label(class_name), name = class_name) for class_name in self.class_handler.get_class_names()],
-#                     classes = "class_names"
-#                 )
-#                 yield Button("Select a class", id = "select-class")
-
-#             else:
-#                 yield Label("You have no classes!")
-
-#         else:
-#             yield Label(f"Selected class: {self.selected_class}")
-
-#     def on_button_pressed(self, event: Button.Pressed) -> None:
-#         if event.button.id == "select-class":
-#             self._select_class()
-
-#     def _select_class(self) -> None:
-#         list_view = self.query_one(".class_names", ListView)
-#         selected = list_view.highlighted_child
-
-#         if selected is None:
-#             self.notify("You must select a class!", severity = "error")
-#             return
-
-#         self.selected_class = selected.name
-#         self.notify(f"Selected class: {self.selected_class}")
-#         self.refresh(recompose = True)
-
+    # Events
+    #region
+    def on_class_widget_handler_class_selected(self, event: ClassWidgetHandler.ClassSelected):
+        self.selected_class = event.class_name
+        self.notify(self.selected_class)
+    #endregion

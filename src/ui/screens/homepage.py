@@ -24,7 +24,9 @@ class HomePage(Screen):
     def compose(self) -> ComposeResult:
         yield Header()
 
-        with TabbedContent():
+        with TabbedContent() as tc:
+            tc.styles.padding = 1
+
             with TabPane("HomePage", id = "homePage-tab"):
                 yield HomeTab(self.class_handler)
             
@@ -47,7 +49,8 @@ class HomePage(Screen):
             self.app.push_screen(CreateAccountForm(), callback = self._create_account_callback)
     
     def on_classes_tab_class_changed(self, event: ClassesTab.ClassChanged) -> None:
-        self.query_one(HomeTab).refresh(recompose=True)
+        self.query_one(HomeTab).refresh(recompose = True)
+        self.query_one(AssignmentsTab).refresh(recompose = True)
     #endregion
 
     # Helpers
