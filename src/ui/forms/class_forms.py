@@ -9,6 +9,8 @@ __all__ = [
 ]
 
 class AddClassForm(ModalScreen):
+    # Display
+    #region
     def compose(self) -> ComposeResult:
         with Vertical(classes = "main-container") as vertical:
             vertical.border_title = "Create Class"
@@ -21,14 +23,20 @@ class AddClassForm(ModalScreen):
 
             yield Button("Create Class", id = "create-class")
             yield Button("Cancel", id = "cancel")
+    #endregion
 
+    # Events
+    #region
     def on_button_pressed(self, event: Button.Pressed) -> None:
         if event.button.id == "create-class":
             self._add_class()
 
         if event.button.id == "cancel":
             self.dismiss(None)
+    #endregion
 
+    # Helpers
+    #region
     def _add_class(self) -> None:
         data = {}
 
@@ -44,12 +52,15 @@ class AddClassForm(ModalScreen):
         data["assignment_weight"] = float(assignment_weight)
         data["test_weight"] = float(test_weight)
         self.dismiss(data)
+    #endregion
 
 class RemoveClassForm(ModalScreen):
     def __init__(self, class_names: list[str]) -> None:
         super().__init__()
         self.class_names = class_names
 
+    # Display
+    #region
     def compose(self) -> ComposeResult:
         with Vertical(classes = "main-container") as vertical:
             vertical.border_title = "Remove Class"
@@ -69,7 +80,10 @@ class RemoveClassForm(ModalScreen):
                 yield Label("No classes!")
 
                 yield Button("Go Back", id = "go-back")
+    #endregion
 
+    # Events
+    #region
     def on_button_pressed(self, event: Button.Pressed) -> None:
         if event.button.id == "remove-class":
             self._remove_class()
@@ -79,7 +93,10 @@ class RemoveClassForm(ModalScreen):
         
         if event.button.id == "go-back":
             self.dismiss(None)
+    #endregion
 
+    # Helpers
+    #region
     def _remove_class(self) -> None:
         list_view = self.query_one(".class_names", ListView)
         selected = list_view.highlighted_child
@@ -89,3 +106,4 @@ class RemoveClassForm(ModalScreen):
 
         class_name = selected.name
         self.dismiss(class_name)
+    #endregion

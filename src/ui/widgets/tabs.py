@@ -25,6 +25,8 @@ class HomeTab(Vertical):
         super().__init__()
         self.class_handler = class_handler
 
+    # Display
+    #region
     def compose(self) -> ComposeResult:
         grid = Grid()
         grid.styles.grid_size_rows = 1
@@ -46,9 +48,13 @@ class HomeTab(Vertical):
                 with vertical:
                     yield Button("Log in", classes = "login-btn")
                     yield Button("Create Account", classes = "create-account-btn")
+    #endregion
 
+    # Events
+    #region
     def on_class_widget_handler_class_edited(self) -> None:
         self.refresh(recompose=True)
+    #endregion
 
 class ClassesTab(Vertical):
     class ClassChanged(Message):
@@ -58,6 +64,8 @@ class ClassesTab(Vertical):
         super().__init__()
         self.class_handler = class_handler
 
+    # Display
+    #region
     def compose(self) -> ComposeResult:
         with Vertical(classes = "main-container"):
             widget = ClassWidgetHandler(self.class_handler, True, self.class_handler.classes)
@@ -74,7 +82,10 @@ class ClassesTab(Vertical):
                 button = Button("Remove Class", classes = "remove-class-btn")
                 button.styles.width = "50%"
                 yield button
+    #endregion
 
+    # Helpers
+    #region
     def _add_class_callback(self, data: dict | None) -> None:
         if data is None:
             return
@@ -91,7 +102,10 @@ class ClassesTab(Vertical):
 
         else:
             self.notify("That class already exists!", severity = "error")
+    #endregion
 
+    # Events
+    #region
     def on_button_pressed(self, event: Button.Pressed) -> None:
         if event.button.has_class("add-class-btn"):
             self.app.push_screen(AddClassForm(), callback = self._add_class_callback)
@@ -115,6 +129,7 @@ class ClassesTab(Vertical):
 
     def on_class_widget_handler_class_edited(self) -> None:
         self.refresh(recompose=True)
+    #endregion
 
 class AssignmentsTab(Vertical):
     def __init__(self, class_handler: ClassHandler) -> None:

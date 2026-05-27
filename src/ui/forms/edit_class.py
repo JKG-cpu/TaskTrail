@@ -17,12 +17,15 @@ class EditClassForm(ModalScreen):
         self.assignments = []
         self.tests = []
 
+    # Display
+    #region
     def compose(self) -> ComposeResult:
         with Vertical(classes = "main-container") as vertical:
             vertical.border_title = f"Edit class: {self.class_name}"
             vertical.styles.height = "auto"
             vertical.styles.border_title_align = "center"
 
+            # Change class name
             with Horizontal(classes = "class-edit") as h:
                 h.border_title = "Change class Name"
                 h.styles.height = "auto"
@@ -35,6 +38,7 @@ class EditClassForm(ModalScreen):
                 label.styles.width = "50%"
                 yield label
             
+            # Change grade weights
             with Grid(classes = "class-edit") as g:
                 g.border_title = "Grade Weights"
                 g.styles.grid_size_columns = 2
@@ -53,6 +57,7 @@ class EditClassForm(ModalScreen):
                 label = Label(f"Current Test Weight: {self.test_weight}")
                 yield label
 
+            # Save and/or Exit
             with Horizontal(classes = "class-edit") as h:
                 h.styles.height = "auto"
 
@@ -63,7 +68,10 @@ class EditClassForm(ModalScreen):
                 cancel = Button("Cancel", id = "cancel")
                 cancel.styles.width = "50%"
                 yield cancel
+    #endregion
 
+    # Events
+    #region
     def on_button_pressed(self, event: Button.Pressed) -> None:
         if event.button.id == "save":
             self._handle_submission()
@@ -71,6 +79,8 @@ class EditClassForm(ModalScreen):
         if event.button.id == "cancel":
             self.dismiss(None)
 
+    # Helpers
+    #region
     def _handle_submission(self) -> None:
         data = {
             "name": self.class_name,
@@ -92,6 +102,7 @@ class EditClassForm(ModalScreen):
             data["test"] = tests
 
         self.dismiss(data)
+    #endregion
 
 class AddGrade(ModalScreen):
     pass

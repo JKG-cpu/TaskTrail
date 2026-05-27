@@ -18,6 +18,8 @@ class ClassWidgets(Button):
         self.assignment_weight = assignment_weight
         self.test_weight = test_weight
 
+    # Details
+    #region
     def compose(self):
         self.border_title = self.class_name
         self.styles.border_title_align = "center"
@@ -33,6 +35,7 @@ class ClassWidgets(Button):
         static = Static(f"Tests: {self.test_weight} percent of overall grade.")
         static.styles.content_align = ("center", "middle")
         yield static
+    #endregion
 
 class ClassWidgetHandler(Static):
     class ClassEdited(Message):
@@ -48,6 +51,8 @@ class ClassWidgetHandler(Static):
         self.class_data = class_data
         self.class_names: list[str] = list(self.class_data.keys())
 
+    # Details
+    #region
     def compose(self) -> ComposeResult:
         if self.logged_in:
             with VerticalScroll(classes = "sub-container") as vertical:
@@ -74,7 +79,10 @@ class ClassWidgetHandler(Static):
                 static.styles.content_align = ("center", "middle")
                 static.styles.height = "1fr"
                 yield static
-    
+    #endregion
+
+    # Events
+    #region
     def on_button_pressed(self, event: Button.Pressed) -> None:
         if hasattr(event.button, "class_name"):
             if event.button.class_name in self.class_names:
@@ -84,7 +92,10 @@ class ClassWidgetHandler(Static):
                     assignment_weight = self.class_data.get(self.selected_class_name)["assignment_weight"],
                     test_weight = self.class_data.get(self.selected_class_name)["assignment_weight"]
                 ), callback = self._handle_edits)
+    #endregion
 
+    # Helpers
+    #region
     def _handle_edits(self, data: dict | None) -> None:
         if data is None:
             return
@@ -104,3 +115,4 @@ class ClassWidgetHandler(Static):
         
         else:
             self.notify("Couldn't save class data!", severity = "error")
+    #endregion

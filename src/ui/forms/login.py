@@ -9,6 +9,8 @@ __all__ = [
 ]
 
 class LoginForm(ModalScreen):
+    # Display
+    #region
     def compose(self) -> ComposeResult:
         with Vertical(classes = "main-container") as vertical:
             vertical.border_title = "Login Form"
@@ -20,14 +22,20 @@ class LoginForm(ModalScreen):
         
             yield Button("Sign In", id = "submit")
             yield Button("Cancel", id = "cancel")
+    #endregion
 
+    # Events
+    #region
     def on_button_pressed(self, event: Button.Pressed) -> None:
         if event.button.id == "submit":
             self._handle_login()
 
         if event.button.id == "cancel":
             self.dismiss(None)
-        
+    #endregion
+
+    # Helpers
+    #region
     def _handle_login(self) -> None:
         data = {}
         username = self.query_one("#username", Input).value
@@ -40,8 +48,11 @@ class LoginForm(ModalScreen):
         data["username"] = username
         data["password"] = password
         self.dismiss(data)
+    #endregion
 
 class CreateAccountForm(ModalScreen):
+    # Display
+    #region
     def compose(self) -> ComposeResult:
         with Vertical(classes = "main-container") as vertical:
             vertical.border_title = "Create an account"
@@ -54,14 +65,20 @@ class CreateAccountForm(ModalScreen):
 
             yield Button("Sign In", id = "submit")
             yield Button("Cancel", id = "cancel")
-    
+    #endregion
+
+    # Events
+    #region
     def on_button_pressed(self, event: Button.Pressed) -> None:
         if event.button.id == "submit":
             self._create_account()
         
         if event.button.id == "cancel":
             self.dismiss(None)
+    #endregion
 
+    # Helpers
+    #region
     def _create_account(self) -> None:
         data = {}
         username = self.query_one("#username", Input).value
@@ -79,3 +96,4 @@ class CreateAccountForm(ModalScreen):
         data["username"] = username
         data["password"] = password
         self.dismiss(data)
+    #endregion
