@@ -148,10 +148,10 @@ class AssignmentsTab(Vertical):
 
             with Vertical():
                 yield ClassWidgetHandler(
-                    class_handler=self.class_handler,
-                    logged_in=True,
-                    class_data=self.class_handler.classes,
-                    editing=False,
+                    class_handler = self.class_handler,
+                    logged_in = True,
+                    class_data = self.class_handler.classes,
+                    editing = False,
                 )
 
             with Vertical(id="assignment-options"):

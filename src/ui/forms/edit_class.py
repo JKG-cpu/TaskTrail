@@ -114,32 +114,33 @@ class AddGrade(ModalScreen):
     #region
     def compose(self) -> ComposeResult:
         with Vertical(classes = "main-container") as v:
-            v.border_title = "Add Test" if self.is_test else "Add Assingment"
+            v.border_title = "Add Test" if self.is_test else "Add Assignment"
             v.styles.border_title_align = "center"
 
             yield Input(
-                placeholder = "Enter Test Name" if self.is_test else "Enter Asssignment Name",
+                placeholder = "Enter Test Name" if self.is_test else "Enter Assignment Name",
                 id = "name"
             )
 
-            with Horizontal():
-                i = Input(
-                    placeholder = "Your Score",
-                    type = "number",
-                    id = "score"
-                )
-                i.styles.width = "50%"
-                yield i
+            if self.is_test:
+                with Horizontal():
+                    i = Input(
+                        placeholder = "Your Score",
+                        type = "number",
+                        id = "score"
+                    )
+                    i.styles.width = "50%"
+                    yield i
 
-                i = Input(
-                    placeholder = "Max Points",
-                    type = "number",
-                    id = "max-score"
-                )
-                i.styles.width = "50%"
-                yield i
+                    i = Input(
+                        placeholder = "Max Points",
+                        type = "number",
+                        id = "max-score"
+                    )
+                    i.styles.width = "50%"
+                    yield i
             
-            yield Button("Add Test" if self.is_test else "Add Assingment", id = "add")
+            yield Button("Add Test" if self.is_test else "Add Assignment", id = "add")
             yield Button("Cancel", id = "cancel")
     #endregion
 
@@ -157,16 +158,27 @@ class AddGrade(ModalScreen):
     #region
     def _submit(self) -> None:
         name = self.query_one("#name", Input).value
-        score = self.query_one("#score", Input).value
-        max_score = self.query_one("#max-score", Input).value
 
-        if name == "" or score == "" or max_score == "":
+        if name == "":
             self.notify("Fill out all the options!", severity = "error")
             return
+
+        if self.is_test:
+            score = self.query_one("#score", Input).value
+            max_score = self.query_one("#max-score", Input).value
+
+            if score == "" or max_score == "":
+                self.notify("Fill out all the options!", severity = "error")
+                return
         
-        self.dismiss({
-            "name": name,
-            "score": Fraction(int(score), int(max_score)),
-            "is_test": self.is_test
-        })
+            self.dismiss({
+                "name": name,
+                "score": Fraction(int(score), int(max_score)),
+                "is_test": self.is_test
+            })
+        else:
+            self.dismiss({
+                "name": name,
+                "is_test": self.is_test
+            })
     #endregion

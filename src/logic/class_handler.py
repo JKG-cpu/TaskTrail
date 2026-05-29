@@ -68,7 +68,7 @@ class ClassHandler:
         del self.classes[class_name]["assignments"][assignment_name]
         return True
     
-    def check_completed_assignment(self, class_name: str, assignment_name: str, grade: str) -> bool:
+    def check_completed_assignment(self, class_name: str, assignment_name: str, grade: Fraction) -> bool:
         if class_name not in self.classes:
             return False
         
@@ -76,13 +76,13 @@ class ClassHandler:
             return False
         
         self.classes[class_name]["assignments"][assignment_name]["completed"] = True
-        self.classes[class_name]["assignments"][assignment_name]["grade"] = Fraction(grade)
+        self.classes[class_name]["assignments"][assignment_name]["grade"] = grade
         return True
     #endregion
 
     # Manage Tests
     #region
-    def add_test(self, class_name: str, name: str, grade: str) -> bool:
+    def add_test(self, class_name: str, name: str, grade: Fraction) -> bool:
         if class_name not in self.classes:
             return False
         
@@ -91,7 +91,7 @@ class ClassHandler:
         
         self.classes[class_name]["tests"][name] = {
             "name": name,
-            "grade": Fraction(grade)
+            "grade": grade
         }
         return True
 

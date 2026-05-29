@@ -7,7 +7,6 @@ from ..forms import AddGrade
 
 __all__ = ["AssignmentWidget"]
 
-
 class AssignmentBox(Vertical):
     def __init__(self, assignment: dict) -> None:
         super().__init__()
@@ -15,7 +14,6 @@ class AssignmentBox(Vertical):
 
     def compose(self) -> ComposeResult:
         yield Label(str(self.assignment))
-
 
 class AssignmentWidget(VerticalScroll):
     def __init__(self, class_handler: ClassHandler, selected_class: str) -> None:
@@ -39,29 +37,30 @@ class AssignmentWidget(VerticalScroll):
             yield ListView(
                 *[ListItem(AssignmentBox(a)) for a in assignments]
                 if assignments else
-                [ListItem(Label("No Assignments created"), disabled=True)],
+                [ListItem(Label("No Assignments created"), disabled = True)],
                 id="assignment-list"
             )
 
         with Horizontal(classes="sub-container"):
-            yield Button("Add Assignment", id="add-assignment")
-            yield Button("Remove Assignment", id="remove-assignment")
+            yield Button("Add Assignment", id = "add-assignment")
+            yield Button("Remove Assignment", id = "remove-assignment")
+            yield Button("Complete Assignment", id = "complete-assignment")
 
         tests = self.class_handler.get_tests(self.selected_class)
-        with Vertical(classes="sub-container") as v:
+        with Vertical(classes = "sub-container") as v:
             v.border_title = "Tests"
             v.styles.border_title_align = "center"
             v.styles.height = "auto"
             yield ListView(
                 *[ListItem(AssignmentBox(t)) for t in tests]
                 if tests else
-                [ListItem(Label("No tests created"), disabled=True)],
-                id="test-list"
+                [ListItem(Label("No tests created"), disabled = True)],
+                id = "test-list"
             )
 
         with Horizontal(classes="sub-container"):
-            yield Button("Add Test", id="add-test")
-            yield Button("Remove Test", id="remove-test")
+            yield Button("Add Test", id = "add-test")
+            yield Button("Remove Test", id = "remove-test")
 
     def on_button_pressed(self, event: Button.Pressed) -> None:
         if event.button.id == "add-assignment":
@@ -80,5 +79,30 @@ class AssignmentWidget(VerticalScroll):
         if data is None:
             return
         
-        self.notify(str(data))
+        if data["is_test"]:
+            valid = self.class_handler.add_test(
+                class_name = self.selected_class,
+                name = data["name"],
+                grade = data["score"]
+            )
+
+            if valid:
+                # ADD REFRESH
+                pass
+
+            else:
+                self.notify("Invalid Test Name (ALREADY USED)")
+
+        else:
+            valid = self.class_handler.add_assignment(
+                class_name = self.selected_class,
+                name = data["name"]
+            )
+
+            if valid:
+                # ADD REFRESH
+                pass
+            
+            else:
+                self.notfiy("Invalid Assignment Name (ALREADY USED)")
     
