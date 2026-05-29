@@ -6,13 +6,13 @@ from textual.containers import (
     Horizontal
 )
 from textual.widgets import (
-    Button, Static, Label,
-    ListView, ListItem
+    Button, Static
 )
 
 from ...logic import ClassHandler
 from ..forms import *
 from .class_widgets import *
+from .assignment_widgets import *
 
 __all__ = [
     "HomeTab",
@@ -146,22 +146,24 @@ class AssignmentsTab(Vertical):
         with Grid() as g:
             g.styles.grid_size_columns = 2
 
-            with Vertical(): yield ClassWidgetHandler(
-                class_handler = self.class_handler, 
-                logged_in = True, 
-                class_data = self.class_handler.classes, 
-                editting = False
-            )
+            with Vertical():
+                yield ClassWidgetHandler(
+                    class_handler=self.class_handler,
+                    logged_in=True,
+                    class_data=self.class_handler.classes,
+                    editing=False,
+                )
 
-            with Vertical() as v:
-                v.border_title = "Assignments"
-                v.styles.border_title_align = "center"
-                yield Label("Hello")
+            with Vertical(id="assignment-options"):
+                yield AssignmentWidget(self.class_handler, self.selected_class)
     #endregion
 
     # Events
     #region
     def on_class_widget_handler_class_selected(self, event: ClassWidgetHandler.ClassSelected):
         self.selected_class = event.class_name
-        self.notify(self.selected_class)
+
+        container = self.query_one("#assignment-options", Vertical)
+        container.query_one(AssignmentWidget).remove()
+        container.mount(AssignmentWidget(self.class_handler, self.selected_class))
     #endregion

@@ -46,7 +46,7 @@ class ClassWidgetHandler(Static):
             super().__init__()
             self.class_name = class_name
 
-    def __init__(self, class_handler: ClassHandler, logged_in: bool, class_data: dict[str, dict], editting: bool = True) -> None:
+    def __init__(self, class_handler: ClassHandler, logged_in: bool, class_data: dict[str, dict], editing: bool = True) -> None:
         super().__init__()
         self.styles.height = "1fr"
 
@@ -55,7 +55,7 @@ class ClassWidgetHandler(Static):
         self.logged_in = logged_in
         self.class_data = class_data
         self.class_names: list[str] = list(self.class_data.keys())
-        self.editting = editting
+        self.editting = editing
 
     # Display
     #region

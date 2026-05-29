@@ -31,9 +31,7 @@ Label {
     content-align: center middle;
 }
 
-LoginForm, CreateAccountForm, 
-AddClassForm, RemoveClassForm, 
-EditClassForm, AddGrade {
+ModalScreen {
     align: center middle;
 }
 
@@ -75,4 +73,20 @@ Input:focus {
 .class-edit {
     border-title-align: center;
     border: solid $primary;
+}
+
+/* IDs */
+#assignment-list, #test-list {
+    height: auto;
+}
+
+#add-assignment, #remove-assignment,
+#add-test, #remove-test {
+    width: 50%;
+    height: 3;
+}
+
+Horizontal.sub-container {
+    height: 5;
+    padding: 0;
 }

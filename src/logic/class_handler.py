@@ -169,6 +169,13 @@ class ClassHandler:
 
     # Get Data
     #region
-    def get_class_names(self) -> list[str]:
-        return list(self.classes.keys())
+    def get_class_names(self) -> list[str]: return list(self.classes.keys())
+
+    def get_assignments(self, class_name: str) -> list[dict]: return list(
+        self.classes[class_name]["assignments"].values()
+    )
+
+    def get_tests(self, class_name: str) -> list[dict]: return list(
+        self.classes[class_name]["tests"].values()
+    )
     #endregion
