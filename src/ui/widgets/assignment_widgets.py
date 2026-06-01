@@ -1,6 +1,7 @@
 from textual.app import ComposeResult
 from textual.widgets import Label, ListView, ListItem, Button
 from textual.containers import Vertical, VerticalScroll, Horizontal
+from textual.messages import Message
 
 from ...logic import ClassHandler
 from ..forms import AddGrade
@@ -16,6 +17,9 @@ class AssignmentBox(Vertical):
         yield Label(str(self.assignment))
 
 class AssignmentWidget(VerticalScroll):
+    class Refresh(Message):
+        pass
+
     def __init__(self, class_handler: ClassHandler, selected_class: str) -> None:
         super().__init__()
         self.classes = "sub-container"
@@ -87,8 +91,7 @@ class AssignmentWidget(VerticalScroll):
             )
 
             if valid:
-                # ADD REFRESH
-                pass
+                self.post_message(self.Refresh())
 
             else:
                 self.notify("Invalid Test Name (ALREADY USED)")
@@ -100,8 +103,7 @@ class AssignmentWidget(VerticalScroll):
             )
 
             if valid:
-                # ADD REFRESH
-                pass
+                self.post_message(self.Refresh())
             
             else:
                 self.notfiy("Invalid Assignment Name (ALREADY USED)")

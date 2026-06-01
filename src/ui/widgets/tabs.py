@@ -134,6 +134,9 @@ class ClassesTab(Vertical):
     #endregion
 
 class AssignmentsTab(Vertical):
+    class Refresh(Message):
+        pass
+
     def __init__(self, class_handler: ClassHandler) -> None:
         super().__init__()
         self.class_handler = class_handler
@@ -166,4 +169,8 @@ class AssignmentsTab(Vertical):
         container = self.query_one("#assignment-options", Vertical)
         container.query_one(AssignmentWidget).remove()
         container.mount(AssignmentWidget(self.class_handler, self.selected_class))
+    
+    def on_assignment_widget_refresh(self, event: AssignmentWidget.Refresh) -> None:
+        self.refresh(recompose = True)
+        self.post_message(self.Refresh())
     #endregion

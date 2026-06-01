@@ -51,6 +51,10 @@ class HomePage(Screen):
     def on_classes_tab_class_changed(self, event: ClassesTab.ClassChanged) -> None:
         self.query_one(HomeTab).refresh(recompose = True)
         self.query_one(AssignmentsTab).refresh(recompose = True)
+    
+    def on_assignments_tab_refresh(self, event: AssignmentsTab.Refresh) -> None:
+        self.query_one(HomeTab).refresh(recompose = True)
+        self.query_one(ClassesTab).refresh(recompose = True)
     #endregion
 
     # Helpers
